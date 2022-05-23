@@ -1,0 +1,93 @@
+{% extends"template.html" %}
+
+{% block title %}
+Эмулятор КЕГЭ по информатике
+{% endblock %}
+
+{% block teststart %} onload="startTimer()"{% endblock %}
+{% block content %}
+	<main class="container-fluid">
+		<div class="row">
+			<div class="col-xl col-lg col-sm-none mn">
+				<ul id="topliti">
+					<li id="litiup" style="background-color: aliceblue;">
+						<span id="tiup">&#8593</span>
+					</li>
+				</ul>
+				<div id="tasks">
+					<ul>
+                          {% for i in range(28) %}
+                              {% if i == 0 %}
+                                  <li class="liti" id="tii" onclick="butcklick({{ i }})"><span>{{ 'i' }}</span></li>
+                              {% else %}
+                                  <li class="liti" onclick="butcklick({{ i }})"><span>{{ i }}</span></li>
+                              {% endif %}
+                          {% endfor %}
+
+					</ul>
+				</div>
+				<ul id="bottomliti">
+					<li id="litidn"><span id="tidn">&#8595</span></li>
+				</ul>
+			</div>
+			<div class="col-xl-11 col-lg-11 col-sm-12" id="taskfield">
+				<div class="row">
+					<ul>
+                        <li style="display:inline-block; margin-right:35%"><a href=# id=prevbutton onclick="previous()" style="display:none;">К предыдущему</a></li>
+                        <li style="display:inline-block; margin-left:35%"><a href=# id=nextbutton onclick="next()">К следующему</a></li>
+                    </ul> 
+				</div>
+				<div class="task-content row">
+					<div class="slide col-xl-9 col-lg-9 col-sm-9 col-xs-12" style="display:block">
+						<p>1. Обозначения для логических связок (операций):</p>
+						<p>a) отрицание (инверсия, логическое НЕ) обозначается ¬ (например, ¬А);</p>
+						<p>b) конъюнкция (логическое умножение, логическое И) обозначается /\ (например, А /\ В) либо & (например, А & В);</p>
+						<p>c) дизъюнкция (логическое сложение, логическое ИЛИ) обозначается \/ (например, А \/ В) либо | (например, А | В);</p>
+						<p>d) следование (импликация) обозначается → (например, А → В);</p>
+						<p>e) тождество обозначается ≡ (например, A ≡ B); выражение A ≡ B истинно тогда и только тогда,
+							когда значения A и B совпадают (либо они оба истинны, либо они оба ложны);</p>
+						<p>f) символ 1 используется для обозначения истины (истинного высказывания); символ 0 – для обозначения лжи (ложного высказывания).</p>
+						<p>2. Два логических выражения, содержащие переменные, называются равносильными (эквивалентными), если
+							значения этих выражений совпадают при любых значениях переменных. Так, выражения А → В и (¬А) \/ В 
+							равносильны, а А \/ В и А /\ В неравносильны (значения выражений разные, например, при А = 1, В = 0).</p>
+						<p>3. Приоритеты логических операций: инверсия (отрицание), конъюнкция (логическое умножение),
+							дизъюнкция (логическое сложение), импликация (следование), тождество. Таким образом, ¬А /\ В \/ С /\ D
+							означает то же, что и ((¬А) /\ В) \/ (С /\ D).
+						</p>
+						<p>Возможна запись А /\ В /\ С вместо (А /\ В) /\ С. То же относится и к дизъюнкции: возможна запись А \/ В \/ С вместо (А \/ В) \/ С.</p>
+						<p>4. Обозначения Мбайт и Кбайт используются в традиционном для информатики смысле – как
+							обозначения единиц измерения, соотношение которых с единицей «байт» выражается степенью двойки.</p>
+					</div>
+					<div class="ansmany col-xl-3 col-lg-3 col-sm-3 col-xs-none">
+						<form style="display:block" id="fm27" class="fm">
+
+							<table width=50>
+								<tr>
+									<td><input type="text" name="ans1"></td>
+									<td><input type="text" name="ans2"></td>
+								</tr>
+							</table>
+							<input type="hidden" name="q_num" value="27">
+							<span class="sub">Отправить</span>
+                        </form>
+					</div>
+				</div>
+				<div class="row">
+					<div class="file col-xl-9 col-lg-9 col-sm-9 col-xs-12">
+						<ul>
+							<li><a href=# download>Скачать файл</a></li>
+						</ul>
+					</div>
+					<div class="ansone col-xl-3 col-lg-3 col-sm-3 col-xs-none">
+						<form style="display:block" id="fm0" class="fm">
+							<input type="text" name="ans1">
+							<input type="hidden" name="q_num" value="0">
+							<span class="sub">Отправить</span>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</main>
+{% endblock %}

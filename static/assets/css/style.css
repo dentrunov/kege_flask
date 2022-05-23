@@ -1,0 +1,231 @@
+body {
+    background-color: aliceblue;
+}
+
+.navbar {
+    background-color: navy;
+    height: auto;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 20pt;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgb(255, 255, 255)
+}
+
+dropdown-menu,
+show {
+    background-color: #EEEEEE;
+}
+
+main {
+    height: auto;
+    max-height: 500px;
+    background-color: aliceblue;
+    margin-top: 10vh;
+}
+
+.mn {
+    margin-bottom: 90px;
+    height: 80vh;
+}
+
+#tasks {
+    overflow-y: scroll;
+    height: 70vh;
+}
+
+#tasks::-webkit-scrollbar {
+    width: 0px;
+
+}
+
+.liti,
+#litiup,
+#litidn {
+    display: list-item;
+    font-weight: bold;
+    list-style-type: none;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    width: 30px;
+    border: 1px transparent solid;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 6px;
+    font-size: 12pt;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+    text-align: center;
+    font-size: 14px;
+}
+
+#litiup,
+#litidn {
+    background-color: navy;
+    color: #FFF;
+}
+
+#tii {
+    background-color: navy;
+    color: #FFF;
+}
+
+.liti {
+    color: black;
+    background-color: antiquewhite;
+}
+
+#taskfield {
+    overflow-y: scroll;
+}
+
+.task-content {
+    margin: 10px 50px;
+    height: auto
+}
+
+.slide,
+.file,
+.ansmany,
+.ansone {
+    background-color: #FFF;
+}
+
+.slide p {
+    font-size: 14pt;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.file ul li {
+    list-style-type: none;
+}
+
+.file ul li a:link {
+    color: black;
+}
+
+input {
+    margin: 10px 0;
+    width: 100px;
+}
+
+.sub {
+    background-color: navy;
+    color: #FFF;
+    padding: 4px 15px;
+    cursor: pointer;
+}
+
+footer {
+    background-color: navy;
+    height: auto;
+    width: 100%;
+}
+
+p.footer {
+    color: #FFF;
+    margin: 10px;
+}
+
+@media only screen and (min-width: 220px) and (max-width: 1000px) {
+    .navbar-brand {
+        font-size: 12pt;
+    }
+
+    .mn {
+        height: auto;
+        margin-bottom: 0;
+    }
+
+    #tasks {
+        height: 100px;
+
+
+    }
+
+    #tasks ul li {
+        display: inline;
+
+    }
+
+    .task-content {
+        margin: 0;
+        height: auto
+    }
+
+    #topliti {
+        display: none;
+    }
+    .liti {
+        padding: 3px;
+     }
+     .liti span {
+         font-size: 18px;
+         padding: 2px;
+     }
+    #bottomliti {
+        display: none;
+    }
+
+    .slide p {
+        font-size: 10pt;
+    }
+
+    .fm input,
+    span {
+        font-size: 8pt;
+
+    }
+   
+    footer {
+        position: relative;
+        font-size: 8pt;
+        display: none;
+
+    }
+
+}
+
+@media only screen and (min-width: 1001px) and (max-width: 1200px) {
+    .navbar-brand {
+        font-size: 12pt;
+    }
+
+    .mn {
+        margin-bottom: 0;
+    }
+
+    #tasks {
+        height: 65vh;
+
+
+    }
+
+    .task-content {
+        margin: 0;
+        height: auto
+    }
+
+    
+    .slide p {
+        font-size: 6pt;
+    }
+
+    .fm input,
+    span {
+        font-size: 8pt;
+
+    }
+
+    footer {
+        position: relative;
+        font-size: 8pt;
+
+    }
+}
