@@ -112,14 +112,14 @@ main {
 
 input {
     margin: 0;
-    width: 100px;
+    width: 110px;
 }
 
 .sub {
     background-color: navy;
     color: #FFF;
+    padding: 4px 15px;
     cursor: pointer;
-    margin: 3px 1px;
 }
 
 footer {
@@ -212,7 +212,6 @@ p.footer {
         height: auto
     }
 
-    
     .slide p {
         font-size: 6pt;
     }
@@ -220,9 +219,7 @@ p.footer {
     .fm input,
     span {
         font-size: 8pt;
-
     }
-
     footer {
         position: relative;
         font-size: 8pt;
