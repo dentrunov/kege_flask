@@ -1,0 +1,27 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-12">
+
+    <h1>Возникла ошибка</h1>
+    <p><a href="{{ url_for('index') }}">На главную</a></p>
+
+
+
+
+
+            </div>
+            <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}
