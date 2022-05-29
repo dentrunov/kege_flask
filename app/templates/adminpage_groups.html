@@ -1,0 +1,34 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+        <div class="col-3"></div>
+            <div class="col-6">
+
+                {% if current_user.role == 2 %}
+                    <h2>Список пользователей группы {{ group.gr_name }}</h2>
+                    <ul>
+                    {% for usr in usrs %}
+                        <li><a href="{{ url_for('user', username=usr.username) }}">{{ usr.user_ }}</a></li>
+                    {% endfor %}
+                    </ul>
+
+                     <ul>
+
+                {% else %}
+                    <h1>У вас нет доступа к этой странице!</h1>
+                {% endif %}
+
+                </div>
+        <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}

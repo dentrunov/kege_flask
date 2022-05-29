@@ -1,0 +1,53 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <h1>Изменить профиль пользователя</h1>
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.user_.label }}<br>
+                        {{ form.user_(size=32) }}<br>
+                        {% for error in form.user_.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                    </p>
+                    <p>
+                        {{ form.role.label }}<br>
+                        {{ form.role }}<br>
+                        {% for error in form.role.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                    </p>
+                    <p>
+                        {% if current_user.role == 2 %}
+                            {{ form.group.label }}<br>
+                            {{ form.group }}<br>
+                            {% for error in form.group.errors %}
+                            <span style="color:red">[{{ error }}]</span>
+                            {%  endfor %}
+                        {%  endif %}
+                    </p>
+                <p>{{ form.submit() }}</p>
+                </form>
+            {%  if current_user.role == 2 %}
+                <p><a href="{{ url_for('adminpage') }}">Администрирование сайта</a></p>
+            {%  endif %}
+
+
+
+            </div>
+            <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}

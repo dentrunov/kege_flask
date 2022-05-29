@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
+from app.models import Users, Groups, Test_started, Tests
+
 
 class LoginForm(FlaskForm):
     username = StringField('Имя пользователя', validators=[DataRequired()])
@@ -8,3 +10,39 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
 
+
+class RegistrationForm(FlaskForm):
+    username = StringField('Имя пользователя', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Подтверждение пароля', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Регистрация')
+
+    def validate_username(self, username):
+        user = Users.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('Пользователь с таким именем уже существует')
+
+    def validate_email(self, email):
+        user = Users.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('Такой адрес электронной почты уже существует')
+
+
+class EditProfileForm(FlaskForm):
+    groups = Groups.query.all()
+    user_ = StringField('Имя', validators=[DataRequired()])
+    role = SelectField('Выберите роль', choices=[(3, 'Ученик'), (4, 'Учитель'), (5, 'Родитель')])
+    group = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups])
+    submit = SubmitField('Сохранить')
+
+
+class NewGroupForm(FlaskForm):
+    gr_name = StringField('Название', validators=[DataRequired()])
+    stud_year = SelectField('Выберите учебный год', choices=[(2022, '2022-2023'), (2023, '2023-2024')])
+    submit = SubmitField('Сохранить')
+
+
+class AsnwerForm(FlaskForm):
+    answerField = StringField('Название')

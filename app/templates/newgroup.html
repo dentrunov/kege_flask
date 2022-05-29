@@ -1,0 +1,44 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <h1>Добавление группы</h1>
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.gr_name.label }}<br>
+                        {{ form.gr_name(size=32) }}<br>
+                        {% for error in form.gr_name.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                    </p>
+                    <p>
+                        {{ form.stud_year.label }}<br>
+                        {{ form.stud_year }}<br>
+                        {% for error in form.stud_year.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                    </p>
+                <p>{{ form.submit() }}</p>
+                </form>
+            {%  if current_user.role == 2 %}
+                <p><a href="{{ url_for('adminpage') }}">Администрирование сайта</a></p>
+            {%  endif %}
+
+
+
+            </div>
+            <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}

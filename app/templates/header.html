@@ -1,6 +1,6 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
 		<div class="container-fluid">
-			<a class="navbar-brand ml-auto" href="#">Эмулятор КЕГЭ по информатике</a>
+			<a class="navbar-brand ml-auto" href="{{ url_for('index') }}">Эмулятор КЕГЭ по информатике</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
 				aria-label="Toggle navigation">
@@ -9,11 +9,10 @@
 			<div class="collapse navbar-collapse collapse justify-content-end" id="navbarSupportedContent">
 				<ul class="navbar-nav mr-auto mb-2 mb-lg-0">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">На главную</a>
+						<a class="nav-link active" aria-current="index" href="{{ url_for('index') }}">На главную</a>
 					</li>
-                    <!--TODO удалить потом -->
                     <li class="nav-item">
-						<a class="nav-link" aria-current="page" href="{{ url_for('login') }}">Войти</a>
+						<a class="nav-link" aria-current="test" href="{{ url_for('test') }}">Тест</a>
 					</li>
                     <!---->
 					<li class="nav-item dropdown">
@@ -22,9 +21,17 @@
 							Личный кабинет
 						</a>
 						<ul class="dropdown-menu mr-auto" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="#">Ученик</a></li>
-							<li><a class="dropdown-item" href="#">Родитель</a></li>
-							<li><a class="dropdown-item" href="#">Учитель</a></li>
+                            {% if current_user.is_authenticated %}
+                                <!--TODO настроить позже-->
+                                <li><a class="dropdown-item" href="#">Ученик</a></li>
+                                <li><a class="dropdown-item" href="#">Родитель</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('user', username=current_user.username) }}">Учитель</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('edit_profile', username=current_user.username) }}">Профиль</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Выйти</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{{ url_for('login') }}">Войти</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('register') }}">Регистрация</a></li>
+                            {% endif %}
 						</ul>
 					</li>
 

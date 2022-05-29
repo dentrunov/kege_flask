@@ -1,0 +1,40 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+        <div class="col-3"></div>
+            <div class="col-6">
+
+                {% if current_user.role == 2 %}
+                    <h2>Список групп</h2>
+                    <ul>
+                    {% for group in groups %}
+                        <li><a href="{{ url_for('adminpage_groups', group=group.group_id) }}">{{ group.gr_name }}</a></li>
+                    {% endfor %}
+                    </ul>
+                    <p><a href="{{ url_for('newgroup') }}">Добавить группу</a></p>
+                    <h2>Список пользователей</h2>
+                    <ul>
+                    {% for usr in usrs %}
+                        <li><a href="{{ url_for('user', username=usr.username) }}">{{ usr.user_ }}</a></li>
+                    {% endfor %}
+                    </ul>
+
+
+                {% else %}
+                    <h1>У вас нет доступа к этой странице!</h1>
+                {% endif %}
+
+                </div>
+        <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}
