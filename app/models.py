@@ -7,6 +7,15 @@ from hashlib import md5
 from app import login, db
 
 
+class Groups(db.Model):
+    group_id = db.Column(db.Integer, primary_key=True)
+    gr_name = db.Column(db.String(64), index=True, unique=True)
+    stud_year = (db.String(64))
+
+    def __repr__(self):
+        return '<Groups {}>'.format(self.gr_name)
+
+
 class Users(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     user_ = db.Column(db.String(64))
@@ -42,15 +51,6 @@ class Users(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
-
-
-class Groups(db.Model):
-    group_id = db.Column(db.Integer, primary_key=True)
-    gr_name = db.Column(db.String(64), index=True, unique=True)
-    stud_year = (db.String(64))
-
-    def __repr__(self):
-        return '<Groups {}>'.format(self.gr_name)
 
 
 class Tests(db.Model):

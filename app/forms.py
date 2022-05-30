@@ -31,10 +31,10 @@ class RegistrationForm(FlaskForm):
 
 
 class EditProfileForm(FlaskForm):
-    groups = Groups.query.all()
+    groups_ = Groups.query.all()
     user_ = StringField('Имя', validators=[DataRequired()])
     role = SelectField('Выберите роль', choices=[(3, 'Ученик'), (4, 'Учитель'), (5, 'Родитель')])
-    group = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups])
+    #group = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups_])
     submit = SubmitField('Сохранить')
 
 
@@ -44,5 +44,24 @@ class NewGroupForm(FlaskForm):
     submit = SubmitField('Сохранить')
 
 
-class AsnwerForm(FlaskForm):
-    answerField = StringField('Название')
+class AnswerSimpleForm(FlaskForm):
+    answerField = StringField('Ответ')
+    submit = SubmitField('Сохранить')
+
+class AnswerTwoForm(FlaskForm):
+    answerField1 = StringField('Ответ')
+    answerField2 = StringField('Ответ')
+    submit = SubmitField('Сохранить')
+
+class AnswerManyForm(FlaskForm):
+    answerField1 = StringField('Ответ')
+    answerField2 = StringField('Ответ')
+    answerField3 = StringField('Ответ')
+    answerField4 = StringField('Ответ')
+    answerField5 = StringField('Ответ')
+    answerField6 = StringField('Ответ')
+    answerField7 = StringField('Ответ')
+    answerField8 = StringField('Ответ')
+    answerField9 = StringField('Ответ')
+    answerField10 = StringField('Ответ')
+    submit = SubmitField('Сохранить')
