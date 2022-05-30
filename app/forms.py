@@ -33,7 +33,14 @@ class EditProfileForm(FlaskForm):
     groups_ = Groups.query.all()
     user_ = StringField('Имя', validators=[DataRequired()])
     role = SelectField('Выберите роль', choices=[(3, 'Ученик'), (4, 'Учитель'), (5, 'Родитель')])
-    #group = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups_])
+    submit = SubmitField('Сохранить')
+
+
+class EditAdminUserProfileForm(FlaskForm):
+    groups_ = Groups.query.all()
+    user_ = StringField('Имя', validators=[DataRequired()])
+    role = SelectField('Выберите роль', choices=[(3, 'Ученик'), (4, 'Учитель'), (5, 'Родитель')])
+    group = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups_])
     submit = SubmitField('Сохранить')
 
 

@@ -25,7 +25,7 @@
                     <p>Ваш статус: {{ role }}</p>
                 {% endif %}
             {%  if user == current_user or current_user.role == 2 %}
-                <p><a href="{{ url_for('edit_profile', username=user.username) }}">Редактировать профиль</a></p>
+                <p><a href="{{ url_for('edit_profile') }}">Редактировать профиль</a></p>
             {%  endif %}
             {%  if user == current_user and user.role == 2 %}
                 <p><a href="{{ url_for('adminpage') }}">Администрирование сайта</a></p>

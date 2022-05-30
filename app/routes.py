@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, NewGroupForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, NewGroupForm, EditAdminUserProfileForm
 from app.models import Users, Groups, Tests, Test_started
 
 
@@ -68,24 +68,19 @@ def user(username):
     return render_template('user.html', user=user, role=role)
 
 
-@app.route('/edit_profile/<username>', methods=['GET', 'POST'])
+@app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
-def edit_profile(username):
-    usr = Users.query.filter_by(username=username).first_or_404()
+def edit_profile():
     form = EditProfileForm()
-    print(1)
     if form.validate_on_submit():
-        usr.user_ = form.user_.data
-        usr.role = form.role.data
-        #usr.group_id = form.group.data
+        current_user.user_ = form.user_.data
+        current_user.role = form.role.data
         db.session.commit()
         flash('Данные изменены')
-        return redirect(url_for('adminpage'))
+        return redirect(url_for('edit_profile'))
     elif request.method == 'GET':
-        form.role.default = usr.role
-        #form.group.default = usr.group_id
-        form.process()
-        form.user_.data = usr.user_
+        form.user_.data = current_user.user_
+        form.role.default = current_user.role
     return render_template('edit_profile.html', title='Редактирование профиля', form=form)
 
 
@@ -101,13 +96,29 @@ def adminpage_groups(group):
 @app.route('/adminpage')
 @login_required
 def adminpage():
-    '''if request.method == 'GET':
-        gr = Groups.query.filter_by(group_id=group).first_or_404()
-        usrs = Users.query.filter_by(group_id=group)
-        return render_template('adminpage.html', title='Список группы '+gr.gr_name, usrs=usrs, groups=gr)'''
     usrs = Users.query.all()
     groups = Groups.query.all()
     return render_template('adminpage.html', title='Администрирование сайта', usrs=usrs, groups=groups)
+
+
+@app.route('/adminpage_edit_user/<username>', methods=['GET', 'POST'])
+@login_required
+def adminpage_edit_user(username):
+    usr = Users.query.filter_by(username=username).first_or_404()
+    form = EditAdminUserProfileForm()
+    if form.validate_on_submit():
+        usr.user_ = form.user_.data
+        usr.role = form.role.data
+        usr.group_id = form.group.data
+        db.session.commit()
+        flash('Данные изменены')
+        return redirect(url_for('adminpage'))
+    elif request.method == 'GET':
+        form.role.default = usr.role
+        form.group.default = usr.group_id
+        form.process()
+        form.user_.data = usr.user_
+    return render_template('adminpage_edit_user.html', title='Редактирование профиля', form=form)
 
 
 @app.route('/newgroup', methods=['GET', 'POST'])
@@ -115,7 +126,6 @@ def adminpage():
 def newgroup():
     form = NewGroupForm()
     if form.validate_on_submit():
-        print(1)
         group = Groups(gr_name=form.gr_name.data, stud_year=form.stud_year.data)
         db.session.add(group)
         db.session.commit()
