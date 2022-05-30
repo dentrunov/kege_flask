@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, NewGroupForm
-from app.models import Users, Groups
+from app.models import Users, Groups, Tests, Test_started
 
 
 @app.route('/')
@@ -73,16 +73,17 @@ def user(username):
 def edit_profile(username):
     usr = Users.query.filter_by(username=username).first_or_404()
     form = EditProfileForm()
+    print(1)
     if form.validate_on_submit():
         usr.user_ = form.user_.data
         usr.role = form.role.data
-        usr.group_id = form.group.data
+        #usr.group_id = form.group.data
         db.session.commit()
         flash('Данные изменены')
         return redirect(url_for('adminpage'))
     elif request.method == 'GET':
         form.role.default = usr.role
-        form.group.default = usr.group_id
+        #form.group.default = usr.group_id
         form.process()
         form.user_.data = usr.user_
     return render_template('edit_profile.html', title='Редактирование профиля', form=form)
