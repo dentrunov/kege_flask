@@ -54,10 +54,12 @@ class AnswerSimpleForm(FlaskForm):
     answerField = StringField('Ответ')
     submit = SubmitField('Сохранить')
 
+
 class AnswerTwoForm(FlaskForm):
     answerField1 = StringField('Ответ')
     answerField2 = StringField('Ответ')
     submit = SubmitField('Сохранить')
+
 
 class AnswerManyForm(FlaskForm):
     answerField1 = StringField('Ответ')
