@@ -14,9 +14,31 @@ def index():
     return render_template('index.html', title='Эмулятор КЕГЭ по информатике')
 
 
-@app.route('/test/')
+@app.route('/test/<test>')
 #@login_required
-def test():
+def test(test):
+    currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+    testName = currentTest.test_name
+    test_path = currentTest.path
+    test_tasks = [currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
+                  currentTest.task_6, currentTest.task_7, currentTest.task_8,currentTest.task_9, currentTest.task_10,
+                  currentTest.task_11, currentTest.task_12, currentTest.task_13, currentTest.task_14, currentTest.task_15,
+                  currentTest.task_16, currentTest.task_17, currentTest.task_18, currentTest.task_19, currentTest.task_20,
+                  currentTest.task_21, currentTest.task_22, currentTest.task_23, currentTest.task_24, currentTest.task_25,
+                  currentTest.task_26, currentTest.task_27]
+    answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
+    answerTwoForm = AnswerTwoForm()
+    answerManyForm = [AnswerManyForm() for i in range(1, 29)]
+
+    return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
+                           answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
+                           answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks)
+
+
+@app.route('/test1/')
+#@login_required
+#временная заглушка
+def test1():
     answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
     answerTwoForm = AnswerTwoForm()
     answerManyForm = [AnswerManyForm() for i in range(1, 29)]
@@ -51,6 +73,7 @@ def logout():
 
 
 @app.route('/register', methods=['GET', 'POST'])
+#функция регистрации
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -69,9 +92,10 @@ def register():
 @login_required
 def user(username):
     user = Users.query.filter_by(username=username).first_or_404()
+    tests = Tests.query.all()
     statuses = ('Неактивирован', 'Пользователь', 'Администратор', 'Ученик', 'Учитель', 'Родитель')
     role = statuses[user.role]
-    return render_template('user.html', user=user, role=role)
+    return render_template('user.html', user=user, role=role, tests=tests)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -105,6 +129,33 @@ def adminpage():
     usrs = Users.query.all()
     groups = Groups.query.all()
     return render_template('adminpage.html', title='Администрирование сайта', usrs=usrs, groups=groups)
+
+
+@app.route('/adminpage_newtest', methods=['GET', 'POST'])
+@login_required
+def adminpage_newtest():
+    form = AddNewTest()
+    tests = Tests.query.all()
+    if form.validate_on_submit():
+        new_test = Tests(user_id=current_user.user_id,
+                         path=form.pathField.data,
+                         test_name=form.testnameField.data,
+                         task_1=form.task_Field1.data, task_2=form.task_Field1.data, task_3=form.task_Field1.data,
+                         task_4=form.task_Field1.data, task_5=form.task_Field1.data, task_6=form.task_Field1.data,
+                         task_7=form.task_Field1.data, task_8=form.task_Field1.data, task_9=form.task_Field1.data,
+                         task_10=form.task_Field1.data, task_11=form.task_Field1.data, task_12=form.task_Field1.data,
+                         task_13=form.task_Field1.data, task_14=form.task_Field1.data, task_15=form.task_Field1.data,
+                         task_16=form.task_Field1.data, task_17=form.task_Field1.data, task_18=form.task_Field1.data,
+                         task_19=form.task_Field1.data, task_20=form.task_Field1.data, task_21=form.task_Field1.data,
+                         task_22=form.task_Field1.data, task_23=form.task_Field1.data, task_24=form.task_Field1.data,
+                         task_25=form.task_Field1.data, task_26=form.task_Field1.data, task_27=form.task_Field1.data)
+        db.session.add(new_test)
+        db.session.commit()
+        flash('Тест сохранен')
+        return redirect(url_for('adminpage_newtest'))
+    elif request.method == 'GET':
+        print(1)
+    return render_template('adminpage_newtest.html', title='Добавление теста', form=form, tests=tests)
 
 
 @app.route('/adminpage_edit_user/<username>', methods=['GET', 'POST'])

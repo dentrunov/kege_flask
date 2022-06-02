@@ -81,7 +81,7 @@ class Test_started(db.Model):
     final_mark = db.Column(db.Integer, default=0)
 
     def __repr__(self):
-        return '<Tests {}>'.format(self.test_name)
+        return '<Tests_started {}>'.format(self.test_name)
 
 
 @login.user_loader

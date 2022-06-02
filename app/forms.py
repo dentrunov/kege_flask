@@ -76,3 +76,11 @@ class AnswerManyForm(FlaskForm):
     answerField10 = StringField('Ответ')
     answerNumber = HiddenField()
     submit = SubmitField('Сохранить')
+
+
+class AddNewTest(FlaskForm):
+    pathField = StringField('Путь к папке теста')
+    testnameField = StringField('Название теста')
+    for i in range(1, 28):
+        locals()['task_Field'+str(i)] = StringField('Задание ' + str(i))
+    submit = SubmitField('Сохранить')

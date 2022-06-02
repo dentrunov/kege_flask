@@ -28,7 +28,7 @@
                         <li><a href="{{ url_for('adminpage_edit_user', username=usr.username) }}">{{ usr.user_ }}</a></li>
                     {% endfor %}
                     </ul>
-
+                <p><a href="{{ url_for('adminpage_newtest') }}">Добавить тест</a></p>
 
                 {% else %}
                     <h1>У вас нет доступа к этой странице!</h1>

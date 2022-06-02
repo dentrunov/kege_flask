@@ -1,0 +1,281 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+
+                {% if current_user.role == 2 %}
+                    <h2>Тесты</h2>
+                    <ul>
+                    {% for test in tests %}
+                        <li><a href="{{ url_for('test', test=test.test_id) }}">{{ test.test_name }}</a></li>
+                    {% endfor %}
+                    </ul>
+                <form action="" method="post" class="addtest">
+                    {{ form.hidden_tag() }}
+                <table>
+                    <tr>
+                       <td colspan="6">{{ form.pathField.label }}<br>
+                        {{ form.pathField(size=32) }}
+                        {% for error in form.pathField.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                       </td>
+                        <td colspan="6">
+                            {{ form.testnameField.label }}<br>
+                        {{ form.testnameField(size=32) }}<br>
+                        {% for error in form.testnameField.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form.task_Field1.label }}<br>
+                            {{ form.task_Field1(size=32) }}<br>
+                            {% for error in form.task_Field1.errors %}
+                            <span style="color:red">[{{ error }}]</span>
+                            {%  endfor %}
+                        </td>
+                        <td>
+                            {{ form.task_Field2.label }}<br>
+                        {{ form.task_Field2(size=32) }}<br>
+                        {% for error in form.task_Field2.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                        <td>
+                            {{ form.task_Field3.label }}<br>
+                        {{ form.task_Field3(size=32) }}<br>
+                        {% for error in form.task_Field3.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                        <td>
+                            {{ form.task_Field4.label }}<br>
+                        {{ form.task_Field4(size=32) }}<br>
+                        {% for error in form.task_Field4.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                        <td>
+                            {{ form.task_Field5.label }}<br>
+                        {{ form.task_Field5(size=32) }}<br>
+                        {% for error in form.task_Field5.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                        <td>
+                            {{ form.task_Field6.label }}<br>
+                        {{ form.task_Field6(size=32) }}<br>
+                        {% for error in form.task_Field6.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field7.label }}<br>
+                        {{ form.task_Field7(size=16) }}<br>
+                        {% for error in form.task_Field7.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                         <td>
+                            {{ form.task_Field8.label }}<br>
+                        {{ form.task_Field8(size=32) }}<br>
+                        {% for error in form.task_Field8.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field9.label }}<br>
+                        {{ form.task_Field9(size=32) }}<br>
+                        {% for error in form.task_Field9.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field10.label }}<br>
+                        {{ form.task_Field10(size=32) }}<br>
+                        {% for error in form.task_Field10.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field11.label }}<br>
+                        {{ form.task_Field11(size=32) }}<br>
+                        {% for error in form.task_Field11.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field12.label }}<br>
+                        {{ form.task_Field12(size=32) }}<br>
+                        {% for error in form.task_Field12.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field13.label }}<br>
+                        {{ form.task_Field13(size=32) }}<br>
+                        {% for error in form.task_Field13.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field14.label }}<br>
+                        {{ form.task_Field14(size=32) }}<br>
+                        {% for error in form.task_Field14.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                    </tr>
+                <tr>
+                     <td>
+                            {{ form.task_Field15.label }}<br>
+                        {{ form.task_Field15(size=32) }}<br>
+                        {% for error in form.task_Field15.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+
+                     <td>
+                            {{ form.task_Field16.label }}<br>
+                        {{ form.task_Field16(size=32) }}<br>
+                        {% for error in form.task_Field16.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+
+                     <td>
+                            {{ form.task_Field17.label }}<br>
+                        {{ form.task_Field17(size=32) }}<br>
+                        {% for error in form.task_Field17.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field18.label }}<br>
+                        {{ form.task_Field18(size=32) }}<br>
+                        {% for error in form.task_Field18.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field19.label }}<br>
+                        {{ form.task_Field19(size=32) }}<br>
+                        {% for error in form.task_Field19.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field20.label }}<br>
+                        {{ form.task_Field20(size=32) }}<br>
+                        {% for error in form.task_Field20.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field21.label }}<br>
+                        {{ form.task_Field21(size=32) }}<br>
+                        {% for error in form.task_Field21.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field22.label }}<br>
+                        {{ form.task_Field22(size=32) }}<br>
+                        {% for error in form.task_Field22.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field23.label }}<br>
+                        {{ form.task_Field23(size=32) }}<br>
+                        {% for error in form.task_Field23.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field24.label }}<br>
+                        {{ form.task_Field24(size=32) }}<br>
+                        {% for error in form.task_Field24.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field25.label }}<br>
+                        {{ form.task_Field25(size=32) }}<br>
+                        {% for error in form.task_Field25.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field26.label }}<br>
+                        {{ form.task_Field26(size=32) }}<br>
+                        {% for error in form.task_Field26.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+                     <td>
+                            {{ form.task_Field27.label }}<br>
+                        {{ form.task_Field27(size=32) }}<br>
+                        {% for error in form.task_Field27.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+
+                        </td>
+
+                    </tr>
+                </table>
+
+
+
+
+                <p>{{ form.submit() }}</p>
+                </form>
+
+
+                {% else %}
+                    <h1>У вас нет доступа к этой странице!</h1>
+                {% endif %}
+
+                </div>
+        <div class="col-2"></div>
+        </div>
+        </div>
+	</main>
+{% endblock %}

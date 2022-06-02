@@ -118,7 +118,8 @@ input {
 .ansmany p {
     margin: 1px 0;
 }
-
+.addtest input
+{width: 100px}
 footer {
     background-color: navy;
     height: auto;
