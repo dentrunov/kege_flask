@@ -17,16 +17,13 @@ def index():
 @app.route('/test/')
 #@login_required
 def test():
-    '''form_n1 = AnswerSimpleForm()
-    form_n1 = AnswerSimpleForm()
-    form_n1 = AnswerSimpleForm()
-    form_n1 = AnswerSimpleForm()
-    form_n1 = AnswerSimpleForm()
-    form_n1 = AnswerSimpleForm()
-    form_n1 = AnswerSimpleForm()'''
-    form = (AnswerSimpleForm() for i in range(1,28))
+    answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
+    answerTwoForm = AnswerTwoForm()
+    answerManyForm = [AnswerManyForm() for i in range(1, 29)]
 
-    return render_template('test.html', title='Эмулятор КЕГЭ по информатике', form=form)
+    return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
+                           answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
+                           answerManyForm=answerManyForm)
 
 
 @app.route('/login', methods=['GET', 'POST'])

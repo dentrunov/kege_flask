@@ -1,4 +1,3 @@
-
 {% extends"template.html" %}
 
 {% block scripts %}
@@ -62,6 +61,7 @@
 
                         <div class="ansmany col-xl-3 col-lg-3 col-sm-3 col-xs-none">
                             {% if i in (26,27) %}
+                            <!--
                             <form class="fm">
 
                                 <table>
@@ -73,8 +73,18 @@
                                 <input type="hidden" name="q_num" value="27">
                                 <input type="submit" class="sub" text="Отправить">
                             </form>
-                                {% elif i == 25%}
-                                <form id="fm27" class="fm">
+                            -->
+                            <form method="POST" class="fm">
+                                {{ answerTwoForm.hidden_tag() }}
+                                <p>{{ answerTwoForm.answerField1 }}
+                                {{ answerTwoForm.answerField2 }}</p>
+                                {{ answerTwoForm.answerNumber(value=i) }}
+                                <p>{{ answerTwoForm.submit() }}</p>
+                            </form>
+
+                                {% elif i == 25 %}
+                                <!--
+                                <form id="fm25" class="fm">
 
                                 <table>
                                     <tr>
@@ -86,8 +96,19 @@
                                         <td><input type="text" name="ans4"></td>
                                     </tr>
                                 </table>
+
                                 <input type="hidden" name="q_num" value="27">
                                 <input type="submit" class="sub" text="Отправить">
+                            </form>
+                            -->
+                            <form method="POST" class="fm">
+                                {{ answerManyForm[i].hidden_tag() }}
+                                <p>{{ answerManyForm[i].answerField1 }}
+                                {{ answerManyForm[i].answerField2 }}</p>
+                                <p>{{ answerManyForm[i].answerField3 }}
+                                {{ answerManyForm[i].answerField4 }}</p>
+                                {{ answerManyForm[i].answerNumber(value=i) }}
+                                <p>{{ answerManyForm[i].submit() }}</p>
                             </form>
                                 {% endif %}
 
@@ -103,10 +124,16 @@
                         </div>
                         <div class="ansone col-xl-3 col-lg-3 col-sm-3 col-xs-none">
                             {%  if i not in (25,26,27) %}
-                            <form id="fm0" class="fm">
+                             <!--<form id="fm0" class="fm">
                                 <input type="text" name="ans1">
                                 <input type="hidden" name="q_num" value="0">
                                 <input type="submit" class="sub" text="Отправить">
+                            </form>-->
+                            <form method="POST" class="fm">
+                                {{ answerSimpleForm[i].hidden_tag() }}
+                                {{ answerSimpleForm[i].answerField() }}
+                                {{ answerSimpleForm[i].answerNumber(value=i) }}
+                                {{ answerSimpleForm[i].submit() }}
                             </form>
                                 {% endif %}
                         </div>

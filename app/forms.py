@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, HiddenField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import Users, Groups, Test_started, Tests
 
@@ -52,12 +52,14 @@ class NewGroupForm(FlaskForm):
 
 class AnswerSimpleForm(FlaskForm):
     answerField = StringField('Ответ')
+    answerNumber = HiddenField()
     submit = SubmitField('Сохранить')
 
 
 class AnswerTwoForm(FlaskForm):
     answerField1 = StringField('Ответ')
     answerField2 = StringField('Ответ')
+    answerNumber = HiddenField()
     submit = SubmitField('Сохранить')
 
 
@@ -72,4 +74,5 @@ class AnswerManyForm(FlaskForm):
     answerField8 = StringField('Ответ')
     answerField9 = StringField('Ответ')
     answerField10 = StringField('Ответ')
+    answerNumber = HiddenField()
     submit = SubmitField('Сохранить')

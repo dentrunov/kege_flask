@@ -112,14 +112,11 @@ main {
 
 input {
     margin: 0;
-    width: 100px;
+    width: 120px;
 }
 
-.sub {
-    background-color: navy;
-    color: #FFF;
-    cursor: pointer;
-    margin: 3px 1px;
+.ansmany p {
+    margin: 1px 0;
 }
 
 footer {
