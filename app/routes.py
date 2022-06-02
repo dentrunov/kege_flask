@@ -32,7 +32,7 @@ def test(test):
 
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
                            answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
-                           answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks)
+                           answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks, test_path=test_path)
 
 
 @app.route('/test1/')
@@ -140,15 +140,15 @@ def adminpage_newtest():
         new_test = Tests(user_id=current_user.user_id,
                          path=form.pathField.data,
                          test_name=form.testnameField.data,
-                         task_1=form.task_Field1.data, task_2=form.task_Field1.data, task_3=form.task_Field1.data,
-                         task_4=form.task_Field1.data, task_5=form.task_Field1.data, task_6=form.task_Field1.data,
-                         task_7=form.task_Field1.data, task_8=form.task_Field1.data, task_9=form.task_Field1.data,
-                         task_10=form.task_Field1.data, task_11=form.task_Field1.data, task_12=form.task_Field1.data,
-                         task_13=form.task_Field1.data, task_14=form.task_Field1.data, task_15=form.task_Field1.data,
-                         task_16=form.task_Field1.data, task_17=form.task_Field1.data, task_18=form.task_Field1.data,
-                         task_19=form.task_Field1.data, task_20=form.task_Field1.data, task_21=form.task_Field1.data,
-                         task_22=form.task_Field1.data, task_23=form.task_Field1.data, task_24=form.task_Field1.data,
-                         task_25=form.task_Field1.data, task_26=form.task_Field1.data, task_27=form.task_Field1.data)
+                         task_1=form.task_Field1.data, task_2=form.task_Field2.data, task_3=form.task_Field3.data,
+                         task_4=form.task_Field4.data, task_5=form.task_Field5.data, task_6=form.task_Field6.data,
+                         task_7=form.task_Field7.data, task_8=form.task_Field8.data, task_9=form.task_Field9.data,
+                         task_10=form.task_Field10.data, task_11=form.task_Field11.data, task_12=form.task_Field12.data,
+                         task_13=form.task_Field13.data, task_14=form.task_Field14.data, task_15=form.task_Field15.data,
+                         task_16=form.task_Field16.data, task_17=form.task_Field17.data, task_18=form.task_Field18.data,
+                         task_19=form.task_Field19.data, task_20=form.task_Field20.data, task_21=form.task_Field21.data,
+                         task_22=form.task_Field22.data, task_23=form.task_Field23.data, task_24=form.task_Field24.data,
+                         task_25=form.task_Field25.data, task_26=form.task_Field26.data, task_27=form.task_Field27.data)
         db.session.add(new_test)
         db.session.commit()
         flash('Тест сохранен')

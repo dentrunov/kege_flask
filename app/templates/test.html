@@ -55,9 +55,9 @@
                 {% else %}
                 <div class="slide" style="display:none">
                     <div class="task-content row">
-                        <div class="col-xl-9 col-lg-9 col-sm-9 col-xs-12">
-                            <p>Задание {{ i }}</p>
-                            <p>{{ test_tasks[i-1] }}</p>
+                        <div class="col-xl-9 col-lg-9 col-sm-9 col-xs-12 tsk">
+                            <h2>Задание {{ i }}</h2>
+                            <p><img src="https://kege.it-generation.ru/tasks/{{ test_path}}/{{i}}.png"</p>
                         </div>
 
                         <div class="ansmany col-xl-3 col-lg-3 col-sm-3 col-xs-none">
@@ -117,9 +117,27 @@
                     </div>
                     <div class="row">
                         <div class="file col-xl-9 col-lg-9 col-sm-9 col-xs-12">
-                            {% if i in (2,9,10,17,18,24,26,27) %}
+                                {% if i in (2,9) %}
+
                             <ul>
-                                <li><a href=# download>Скачать файл</a></li>
+                                <li><a href="https://kege.it-generation.ru/tasks/{{ test_path}}/files/0{{i}}.xlsx" download>Скачать файл</a></li>
+                            </ul>
+                                {% elif i == 18 %}
+                            <ul>
+                                <li><a href="https://kege.it-generation.ru/tasks/{{ test_path}}/files/{{i}}.xlsx" download>Скачать файл</a></li>
+                            </ul>
+                                {% elif i == 10 %}
+                            <ul>
+                                <li><a href="https://kege.it-generation.ru/tasks/{{ test_path}}/files/10/10.docx" download>Скачать файл</a></li>
+                            </ul>
+                                {% elif i in (17,24,26) %}
+                            <ul>
+                                <li><a href="https://kege.it-generation.ru/tasks/{{ test_path}}/files/{{i}}.txt" download>Скачать файл</a></li>
+                            </ul>
+                                {% elif i == 27 %}
+                            <ul>
+                                <li><a href="https://kege.it-generation.ru/tasks/{{ test_path}}/files/27-A.txt" download>Скачать файл A</a></li>
+                                <li><a href="https://kege.it-generation.ru/tasks/{{ test_path}}/files/27-B.txt" download>Скачать файл B</a></li>
                             </ul>
                                 {% endif %}
                         </div>

@@ -101,7 +101,10 @@ main {
     -webkit-user-select: none;
     user-select: none;
 }
-
+.tsk {
+    overflow-y: scroll;
+    max-height: 70vh;
+}
 .file ul li {
     list-style-type: none;
 }
