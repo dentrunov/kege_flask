@@ -75,7 +75,7 @@
                                 <input type="submit" class="sub" text="Отправить">
                             </form>
                             -->
-                            <form method="POST" class="fm">
+                            <form method="POST" class="fm" id="form{{ i }}">
                                 {{ answerTwoForm.hidden_tag() }}
                                 <p>{{ answerTwoForm.answerField1 }}
                                 {{ answerTwoForm.answerField2 }}</p>
@@ -102,7 +102,7 @@
                                 <input type="submit" class="sub" text="Отправить">
                             </form>
                             -->
-                            <form method="POST" class="fm">
+                            <form method="POST" class="fm" id="form{{ i }}">
                                 {{ answerManyForm[i].hidden_tag() }}
                                 <p>{{ answerManyForm[i].answerField1 }}
                                 {{ answerManyForm[i].answerField2 }}</p>
@@ -148,7 +148,7 @@
                                 <input type="hidden" name="q_num" value="0">
                                 <input type="submit" class="sub" text="Отправить">
                             </form>-->
-                            <form method="POST" class="fm">
+                            <form method="POST" class="fm" id="form{{ i }}">
                                 {{ answerSimpleForm[i].hidden_tag() }}
                                 {{ answerSimpleForm[i].answerField() }}
                                 {{ answerSimpleForm[i].answerNumber(value=i) }}

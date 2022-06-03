@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -33,6 +34,18 @@ def test(test):
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
                            answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
                            answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks, test_path=test_path)
+
+
+@app.route('/taskcheck', methods=['POST'])
+def taskcheck():
+    form = AnswerSimpleForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            r = request.base_url
+            return r
+        '''   return json.dumps({'success': 'true', 'msg': 'Хорошо'})
+        else:
+            return json.dumps({'success': 'false', 'msg': 'Плохо'})'''
 
 
 @app.route('/test1/')

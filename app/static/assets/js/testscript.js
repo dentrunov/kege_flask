@@ -81,18 +81,20 @@ $('#litidn').on("click", function() {
 
 
 $(document).ready(function() {
-    $(".sub").click(function(event) {
+    $(".fm").submit(function(event) {
         event.preventDefault();
         let form_id = $(this).closest("form").attr('id');
 
         $.ajax({
-            url: "admin/taskcheck.php",
+            url: "/taskcheck",
             type: "POST",
             data: $('#' + form_id).serialize(),
             success: function(result) {
+                alert(result);
+                /*
                 $("#addover").slideToggle(1000);
                 $("#addover").html(result);
-                $("#addover").slideToggle(1000);
+                $("#addover").slideToggle(1000);*/
 
             }
         });
