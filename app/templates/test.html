@@ -76,9 +76,9 @@
                             </form>
                             -->
                             <form method="POST" class="fm" id="form{{ i }}">
-                                {{ answerTwoForm.hidden_tag() }}
-                                <p>{{ answerTwoForm.answerField1 }}
-                                {{ answerTwoForm.answerField2 }}</p>
+                                {{ answerTwoForm.csrf_token() }}
+                                <p>{{ answerTwoForm.answerField1() }}
+                                {{ answerTwoForm.answerField2() }}</p>
                                 {{ answerTwoForm.answerNumber(value=i) }}
                                 <p>{{ answerTwoForm.submit() }}</p>
                             </form>
@@ -103,11 +103,11 @@
                             </form>
                             -->
                             <form method="POST" class="fm" id="form{{ i }}">
-                                {{ answerManyForm[i].hidden_tag() }}
-                                <p>{{ answerManyForm[i].answerField1 }}
-                                {{ answerManyForm[i].answerField2 }}</p>
-                                <p>{{ answerManyForm[i].answerField3 }}
-                                {{ answerManyForm[i].answerField4 }}</p>
+                                {{ answerManyForm[i].csrf_token() }}
+                                <p>{{ answerManyForm[i].answerField1() }}
+                                {{ answerManyForm[i].answerField2() }}</p>
+                                <p>{{ answerManyForm[i].answerField3() }}
+                                {{ answerManyForm[i].answerField4() }}</p>
                                 {{ answerManyForm[i].answerNumber(value=i) }}
                                 <p>{{ answerManyForm[i].submit() }}</p>
                             </form>
@@ -149,7 +149,7 @@
                                 <input type="submit" class="sub" text="Отправить">
                             </form>-->
                             <form method="POST" class="fm" id="form{{ i }}">
-                                {{ answerSimpleForm[i].hidden_tag() }}
+                                {{ answerSimpleForm[i].csrf_token() }}
                                 {{ answerSimpleForm[i].answerField() }}
                                 {{ answerSimpleForm[i].answerNumber(value=i) }}
                                 {{ answerSimpleForm[i].submit() }}

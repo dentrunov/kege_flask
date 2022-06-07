@@ -73,8 +73,6 @@ class Test_started(db.Model):
     time_start = db.Column(db.DateTime, index=True, default=datetime.now)
     time_end = db.Column(db.DateTime, index=True)
     ended = db.Column(db.Boolean, index=True, default=False)
-    path = db.Column(db.String(64))
-    test_name = db.Column(db.String(64), index=True)
     for i in range(1, 28):
         locals()['task_'+str(i)] = db.Column(db.String(64))
     primary_mark = db.Column(db.Integer, default=0)

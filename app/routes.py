@@ -1,7 +1,7 @@
 from datetime import datetime
 import json
 
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
@@ -18,19 +18,33 @@ def index():
 @app.route('/test/<test>')
 #@login_required
 def test(test):
-    currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+    if not ('try' in session):
+        #определяем ид теста в базе тестов
+        currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+        #создаем новую записть прохождения теста
+        newTest = Test_started(user_id=current_user.user_id, test_id=test)
+        db.session.add(newTest)
+        db.session.commit()
+        #создаем сессию
+        session['try'] = newTest.try_id
+    else:
+        #TODO доделать - если тест уже был начат -подстановку данных ответов
+        currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+        newTest = Test_started.query.filter_by(try_id=session['try']).first()
+    #создаем рендер страницы
     testName = currentTest.test_name
     test_path = currentTest.path
+    #записываем ответы на задания TODO пересмотреть этот момент
     test_tasks = [currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
                   currentTest.task_6, currentTest.task_7, currentTest.task_8,currentTest.task_9, currentTest.task_10,
                   currentTest.task_11, currentTest.task_12, currentTest.task_13, currentTest.task_14, currentTest.task_15,
                   currentTest.task_16, currentTest.task_17, currentTest.task_18, currentTest.task_19, currentTest.task_20,
                   currentTest.task_21, currentTest.task_22, currentTest.task_23, currentTest.task_24, currentTest.task_25,
                   currentTest.task_26, currentTest.task_27]
+    #генерируем формы
     answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
     answerTwoForm = AnswerTwoForm()
     answerManyForm = [AnswerManyForm() for i in range(1, 29)]
-
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
                            answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
                            answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks, test_path=test_path)
@@ -39,22 +53,26 @@ def test(test):
 @app.route('/taskcheck', methods=['POST'])
 def taskcheck():
     form = AnswerSimpleForm()
+    #activeTest = session['test']
     if request.method == "POST":
-        if form.validate_on_submit():
-            r = request.base_url
-            return r
-        '''   return json.dumps({'success': 'true', 'msg': 'Хорошо'})
-        else:
-            return json.dumps({'success': 'false', 'msg': 'Плохо'})'''
+        field = request.form.get('answerField')
+        ans_number = 'task_' + request.form.get('answerNumber')
+        #ans = Test_started.query.with_entities(Test_started)
+        answer = Test_started.query.filter_by(try_id=session['try']).first()
+        answer.task_1 = field
+        db.session.commit()
+        return json.dumps({'success': 'true', 'msg': 'Сохранено'})
+    else:
+        return json.dumps({'success': 'false', 'msg': 'Плохо'})
 
 
 @app.route('/test1/')
 #@login_required
 #временная заглушка
 def test1():
-    answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
-    answerTwoForm = AnswerTwoForm()
-    answerManyForm = [AnswerManyForm() for i in range(1, 29)]
+    answerSimpleForm = [AnswerSimpleForm(answerNumber=i) for i in range(1, 29)]
+    answerTwoForm = [AnswerTwoForm(answerNumber=i) for i in range(1, 29)]
+    answerManyForm = [AnswerManyForm(answerNumber=i) for i in range(1, 29)]
 
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
                            answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,

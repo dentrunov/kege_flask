@@ -81,6 +81,7 @@ $('#litidn').on("click", function() {
 
 
 $(document).ready(function() {
+    //функция обработки и сохранения вопроса
     $(".fm").submit(function(event) {
         event.preventDefault();
         let form_id = $(this).closest("form").attr('id');
