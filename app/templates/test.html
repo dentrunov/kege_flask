@@ -61,47 +61,18 @@
                         </div>
 
                         <div class="ansmany col-xl-3 col-lg-3 col-sm-3 col-xs-none">
-                            {% if i in (26,27) %}
-                            <!--
-                            <form class="fm">
+                            {% if i in (17,18,20,26,27) %}
 
-                                <table>
-                                    <tr>
-                                        <td><input type="text" name="ans1"></td>
-                                        <td><input type="text" name="ans2"></td>
-                                    </tr>
-                                </table>
-                                <input type="hidden" name="q_num" value="27">
-                                <input type="submit" class="sub" text="Отправить">
-                            </form>
-                            -->
                             <form method="POST" class="fm" id="form{{ i }}">
-                                {{ answerTwoForm.csrf_token() }}
-                                <p>{{ answerTwoForm.answerField1() }}
-                                {{ answerTwoForm.answerField2() }}</p>
-                                {{ answerTwoForm.answerNumber(value=i) }}
-                                <p>{{ answerTwoForm.submit() }}</p>
+                                {{ answerTwoForm[i].csrf_token() }}
+                                <p>{{ answerTwoForm[i].answerField1() }}
+                                {{ answerTwoForm[i].answerField2() }}</p>
+                                {{ answerTwoForm[i].answerNumber(value=i) }}
+                                <p>{{ answerTwoForm[i].submit() }}</p>
                             </form>
 
                                 {% elif i == 25 %}
-                                <!--
-                                <form id="fm25" class="fm">
 
-                                <table>
-                                    <tr>
-                                        <td><input type="text" name="ans1"></td>
-                                        <td><input type="text" name="ans2"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input type="text" name="ans3"></td>
-                                        <td><input type="text" name="ans4"></td>
-                                    </tr>
-                                </table>
-
-                                <input type="hidden" name="q_num" value="27">
-                                <input type="submit" class="sub" text="Отправить">
-                            </form>
-                            -->
                             <form method="POST" class="fm" id="form{{ i }}">
                                 {{ answerManyForm[i].csrf_token() }}
                                 <p>{{ answerManyForm[i].answerField1() }}
@@ -142,12 +113,8 @@
                                 {% endif %}
                         </div>
                         <div class="ansone col-xl-3 col-lg-3 col-sm-3 col-xs-none">
-                            {%  if i not in (25,26,27) %}
-                             <!--<form id="fm0" class="fm">
-                                <input type="text" name="ans1">
-                                <input type="hidden" name="q_num" value="0">
-                                <input type="submit" class="sub" text="Отправить">
-                            </form>-->
+                            {%  if i not in (17,18,20,25,26,27) %}
+
                             <form method="POST" class="fm" id="form{{ i }}">
                                 {{ answerSimpleForm[i].csrf_token() }}
                                 {{ answerSimpleForm[i].answerField() }}

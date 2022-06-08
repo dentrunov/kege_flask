@@ -18,6 +18,9 @@ def index():
 @app.route('/test/<test>')
 #@login_required
 def test(test):
+    answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
+    answerTwoForm = [AnswerTwoForm() for i in range(1, 29)]
+    answerManyForm = [AnswerManyForm() for i in range(1, 29)]
     if not ('try' in session):
         #определяем ид теста в базе тестов
         currentTest = Tests.query.filter_by(test_id=test).first_or_404()
@@ -31,6 +34,17 @@ def test(test):
         #TODO доделать - если тест уже был начат -подстановку данных ответов
         currentTest = Tests.query.filter_by(test_id=test).first_or_404()
         newTest = Test_started.query.filter_by(try_id=session['try']).first()
+        for i in range(1,28):
+            if getattr(newTest,'task_'+str(i)) is not None:
+                if i in (17,18,20,26,27):
+                    answerTwoForm[i].answerField1.data, answerTwoForm[i].answerField2.data = getattr(newTest, 'task_' + str(i)).split(';')
+                elif i == 25:
+                    field_full = getattr(newTest, 'task_' + str(i)).split(';')
+                    for j in range(len(field_full)):
+                        setattr(answerManyForm[i], 'answerField'+str(j)+'.data', field_full[j])
+                else:
+                    answerSimpleForm[i].answerField.data = getattr(newTest, 'task_'+str(i))
+
     #создаем рендер страницы
     testName = currentTest.test_name
     test_path = currentTest.path
@@ -42,9 +56,9 @@ def test(test):
                   currentTest.task_21, currentTest.task_22, currentTest.task_23, currentTest.task_24, currentTest.task_25,
                   currentTest.task_26, currentTest.task_27]
     #генерируем формы
-    answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
+    '''answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
     answerTwoForm = AnswerTwoForm()
-    answerManyForm = [AnswerManyForm() for i in range(1, 29)]
+    answerManyForm = [AnswerManyForm() for i in range(1, 29)]'''
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
                            answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
                            answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks, test_path=test_path)
@@ -52,14 +66,22 @@ def test(test):
 
 @app.route('/taskcheck', methods=['POST'])
 def taskcheck():
-    form = AnswerSimpleForm()
-    #activeTest = session['test']
     if request.method == "POST":
-        field = request.form.get('answerField')
-        ans_number = 'task_' + request.form.get('answerNumber')
-        #ans = Test_started.query.with_entities(Test_started)
+        task_number = request.form.get('answerNumber')
+        if int(task_number) in (17, 18 ,20, 26, 27):
+            field = request.form.get('answerField1') + ';' + request.form.get('answerField2')
+            print(field)
+        elif int(task_number) == 25:
+            field = ''
+            for i in range(1,11):
+                if request.form.get('answerField' + str(i)) is not None:
+                    field += (request.form.get('answerField' + str(i)) + ';')
+                    print(field)
+            field = field.rstrip(';')
+        else:
+            field = request.form.get('answerField')
         answer = Test_started.query.filter_by(try_id=session['try']).first()
-        answer.task_1 = field
+        setattr(answer, 'task_'+task_number, field)
         db.session.commit()
         return json.dumps({'success': 'true', 'msg': 'Сохранено'})
     else:
