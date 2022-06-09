@@ -91,25 +91,26 @@ $(document).ready(function() {
             type: "POST",
             data: $('#' + form_id).serialize(),
             success: function(result) {
-                alert(result);
-                /*
-                $("#addover").slideToggle(1000);
-                $("#addover").html(result);
-                $("#addover").slideToggle(1000);*/
-
+                $("#message").slideToggle(1000);
+                $("#message").html('Сохранено');
+                $("#message").slideToggle(1000);
             }
         });
         event.stopImmediatePropagation();
     });
 });
 
+function user_finish_test() {
+    confirm('Вы хотите завершить тест?')
+}
+
     function startTimer() {
-        var my_timer = document.getElementById("my_timer");
-        var time = my_timer.innerHTML;
-        var arr = time.split(":");
-        var h = arr[0];
-        var m = arr[1];
-        var s = arr[2];
+        let my_timer = document.getElementById("my_timer");
+        let time = my_timer.innerHTML;
+        let arr = time.split(":");
+        let h = arr[0];
+        let m = arr[1];
+        let s = arr[2];
         if (s == 0) {
         if (m == 0) {
         if (h == 0) {

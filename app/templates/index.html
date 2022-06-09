@@ -10,15 +10,26 @@
 {% block content %}
     <main class="container-fluid">
         <div class="row">
-            <div class="col-12">
+            <div class="col-2"></div>
+            <div class="col-8" style="text-align: center">
+                <h2 style="padding-bottom: 100px">Вы хотите потренироваться? Пройдите тест в нашем эмуляторе ЕГЭ</h2>
                 {% if not(current_user.is_authenticated) %}
 
                     <p><a href="{{ url_for('login') }}">Войдите на сайт</a></p>
+                    <p><a href="{{ url_for('register') }}">Регистрация</a></p>
                 {% else %}
-                    <h1>Hi, {{ current_user.username }}!</h1>
+                    <h3>Hi, {{ current_user.username }}!</h3>
+                    <p><a href="{{ url_for('user', username=current_user.username) }}">Личный кабинет</a></p>
+                    <p><a href="{{ url_for('edit_profile') }}">Изменить профиль</a></p>
+                    <h3>Тесты</h3>
+                    <ul class="course_list">
+                    {% for test in tests %}
+                        <li><a href="{{ url_for('test', test=test.test_id) }}">{{ test.test_name }}</a> ({{ test.time_added.strftime('%d.%m.%Y') }})</li>
+                    {% endfor %}
+                    </ul>
                 {% endif %}
-
-                </div>
+            </div>
+            <div class="col-2"></div>
         </div>
 	</main>
 {% endblock %}

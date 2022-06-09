@@ -12,18 +12,20 @@ from app.models import Users, Groups, Tests, Test_started
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', title='Эмулятор КЕГЭ по информатике')
+    tests = Tests.query.order_by(Tests.time_added.desc())
+    return render_template('index.html', title='Эмулятор КЕГЭ по информатике', tests=tests)
 
 
 @app.route('/test/<test>')
 #@login_required
 def test(test):
+    # генерируем формы TODO перепроверить, 25 сделать не в списке
     answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
     answerTwoForm = [AnswerTwoForm() for i in range(1, 29)]
     answerManyForm = [AnswerManyForm() for i in range(1, 29)]
+    #читаем задания теста из БД
+    currentTest = Tests.query.filter_by(test_id=test).first_or_404()
     if not ('try' in session):
-        #определяем ид теста в базе тестов
-        currentTest = Tests.query.filter_by(test_id=test).first_or_404()
         #создаем новую записть прохождения теста
         newTest = Test_started(user_id=current_user.user_id, test_id=test)
         db.session.add(newTest)
@@ -31,8 +33,8 @@ def test(test):
         #создаем сессию
         session['try'] = newTest.try_id
     else:
-        #TODO доделать - если тест уже был начат -подстановку данных ответов
-        currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+        #если тест уже начат TODO проверить проверку на завершенность
+        #читаем данные начатого теста
         newTest = Test_started.query.filter_by(try_id=session['try']).first()
         for i in range(1,28):
             if getattr(newTest,'task_'+str(i)) is not None:
@@ -55,25 +57,25 @@ def test(test):
                   currentTest.task_16, currentTest.task_17, currentTest.task_18, currentTest.task_19, currentTest.task_20,
                   currentTest.task_21, currentTest.task_22, currentTest.task_23, currentTest.task_24, currentTest.task_25,
                   currentTest.task_26, currentTest.task_27]
-    #генерируем формы
-    '''answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
-    answerTwoForm = AnswerTwoForm()
-    answerManyForm = [AnswerManyForm() for i in range(1, 29)]'''
+
+    #генерируем рендер
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
                            answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
                            answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks, test_path=test_path)
 
 
 @app.route('/taskcheck', methods=['POST'])
+@login_required
 def taskcheck():
+    #скипт записи задания
     if request.method == "POST":
         task_number = request.form.get('answerNumber')
-        if int(task_number) in (17, 18 ,20, 26, 27):
+        if int(task_number) in (17, 18, 20, 26, 27):
             field = request.form.get('answerField1') + ';' + request.form.get('answerField2')
             print(field)
         elif int(task_number) == 25:
             field = ''
-            for i in range(1,11):
+            for i in range(1, 11):
                 if request.form.get('answerField' + str(i)) is not None:
                     field += (request.form.get('answerField' + str(i)) + ';')
                     print(field)
@@ -86,6 +88,16 @@ def taskcheck():
         return json.dumps({'success': 'true', 'msg': 'Сохранено'})
     else:
         return json.dumps({'success': 'false', 'msg': 'Плохо'})
+
+
+@app.route('/finishtest')
+@login_required
+def finishtest():
+    #скрипт завершения теста пользователем
+    if 'try' in session:
+        pass
+    else:
+        pass
 
 
 @app.route('/test1/')
@@ -144,11 +156,11 @@ def register():
 @app.route('/user/<username>')
 @login_required
 def user(username):
-    user = Users.query.filter_by(username=username).first_or_404()
-    tests = Tests.query.all()
+    user_ = Users.query.filter_by(username=username).first_or_404()
+    tests = Tests.query.order_by(Tests.time_added.desc())
     statuses = ('Неактивирован', 'Пользователь', 'Администратор', 'Ученик', 'Учитель', 'Родитель')
     role = statuses[user.role]
-    return render_template('user.html', user=user, role=role, tests=tests)
+    return render_template('user.html', user=user_, role=role, tests=tests)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
