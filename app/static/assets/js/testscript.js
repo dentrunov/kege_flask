@@ -100,9 +100,23 @@ $(document).ready(function() {
     });
 });
 
-function user_finish_test() {
-    confirm('Вы хотите завершить тест?')
-}
+$(document).ready(function() {
+    //функция завершения теста
+     $("#endtest").click(function(event) {
+         let end = confirm('Вы хотите завершить тест?')
+         if (end) {
+              $.ajax({
+            url: "/finishtest",
+            success: function(result) {
+                $("#message").slideToggle(1000);
+                $("#message").html('Тест завершен');
+                $("#message").slideToggle(1000);
+            }
+        });
+         };
+        event.stopImmediatePropagation();
+     });
+});
 
     function startTimer() {
         let my_timer = document.getElementById("my_timer");

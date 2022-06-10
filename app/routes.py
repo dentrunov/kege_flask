@@ -95,9 +95,23 @@ def taskcheck():
 def finishtest():
     #скрипт завершения теста пользователем
     if 'try' in session:
-        pass
+        try_ = session['try']
+        #TODO не работает --- доделать с join
+        currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
+        test = currentTry.test_id
+        currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+        currentTry.ended = 1
+        currentTry.time_end = datetime.now()
+        return render_template('finishtest.html', title='Результаты теста '+currentTest.test_name, answers=currentTry, trueAnswers=currentTest)
     else:
         pass
+
+
+@app.route('/showresult/<test>')
+@login_required
+def showresult():
+    pass
+    #TODO скрипт просмотра результатов теста
 
 
 @app.route('/test1/')
