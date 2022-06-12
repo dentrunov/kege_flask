@@ -95,13 +95,13 @@ def taskcheck():
 def finishtest():
     #скрипт завершения теста пользователем
     if 'try' in session:
-        try_ = session['try']
-        #TODO не работает --- доделать с join
+        try_ = session['try']        #TODO не работает --- доделать с join
         currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
         test = currentTry.test_id
         currentTest = Tests.query.filter_by(test_id=test).first_or_404()
-        currentTry.ended = 1
+        currentTry.ended = True
         currentTry.time_end = datetime.now()
+        db.session.commit()
         return render_template('finishtest.html', title='Результаты теста '+currentTest.test_name, answers=currentTry, trueAnswers=currentTest)
     else:
         pass
@@ -271,6 +271,12 @@ def newgroup():
         pass
     return render_template('newgroup.html', title='Добавление группы', form=form)
 
+@app.route('/admin_result')
+@login_required
+def admin_result():
+    #временная страница обзора БД
+    test_e = Test_started().query.all()
+    return render_template('admin_result.html',test_e=test_e)
 
 @app.before_request
 def before_request():

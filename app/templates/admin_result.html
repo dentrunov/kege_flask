@@ -1,0 +1,23 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+        <div class="col-3"></div>
+            <div class="col-6">
+                <h1>Результаты теста</h1>
+                {% for t in test_e %}
+                    <p><span>{{ t.ended }}</span><span>{{ t.try_id }}</span><span>{{ t.time_end }}</span></p>
+                {% endfor %}
+            </div>
+        <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}
