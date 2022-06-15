@@ -84,7 +84,7 @@ $(document).ready(function() {
     //функция обработки и сохранения вопроса
     $(".fm").submit(function(event) {
         event.preventDefault();
-        let form_id = $(this).closest("form").attr('id');
+        var form_id = $(this).closest("form").attr('id');
 
         $.ajax({
             url: "/taskcheck",
@@ -103,14 +103,12 @@ $(document).ready(function() {
 $(document).ready(function() {
     //функция завершения теста
      $("#endtest").click(function(event) {
-         let end = confirm('Вы хотите завершить тест?')
+         var end = confirm('Вы хотите завершить тест?')
          if (end) {
               $.ajax({
             url: "/finishtest",
             success: function(result) {
-                $("#message").slideToggle(1000);
-                $("#message").html('Тест завершен');
-                $("#message").slideToggle(1000);
+                location.href = '../showresult'
             }
         });
          };
@@ -119,12 +117,12 @@ $(document).ready(function() {
 });
 
     function startTimer() {
-        let my_timer = document.getElementById("my_timer");
-        let time = my_timer.innerHTML;
-        let arr = time.split(":");
-        let h = arr[0];
-        let m = arr[1];
-        let s = arr[2];
+        var my_timer = document.getElementById("my_timer");
+        var time = my_timer.innerHTML;
+        var arr = time.split(":");
+        var h = arr[0];
+        var m = arr[1];
+        var s = arr[2];
         if (s == 0) {
         if (m == 0) {
         if (h == 0) {

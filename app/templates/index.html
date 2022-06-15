@@ -27,6 +27,13 @@
                         <li><a href="{{ url_for('test', test=test.test_id) }}">{{ test.test_name }}</a> ({{ test.time_added.strftime('%d.%m.%Y') }})</li>
                     {% endfor %}
                     </ul>
+                    <!--TODO переделать просмотр пройденных-->
+                    <ul>
+                    <h3>Выполненные тесты</h3>
+                    {% for test_st in tests_started %}
+                        <li>{{ test_st.try_id }}({{ test_st.time_end.strftime('%d.%m.%Y') }})</li>
+                    {% endfor %}
+                    </ul>
                 {% endif %}
             </div>
             <div class="col-2"></div>

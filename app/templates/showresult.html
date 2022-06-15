@@ -1,0 +1,107 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+        <div class="col-3"></div>
+            <div class="col-6">
+                <h1>Результаты теста</h1>
+                <table class="showresult">
+                    <tr><td>№ п/п</td><td>Балл</td><td>Ответ</td><td>Верный ответ</td></tr>
+                {% set summ = 0 %}
+                    {% for i in range(1,28) %}
+                        {% set ans = 0 %}
+                        {% set color='red'%}
+                        {% if currentAnswers[i-1] == test[i-1] %}
+                            {% set ans=1 %}
+                            {% set color='green'%}
+                            {% set summ = summ + 1 %}
+                        {%  endif %}
+                    <tr style="background-color: {{ color }}">
+                        <td>{{ i }}</td>
+                        <td>{{ ans }}
+                        </td>
+                        <td>{{ currentAnswers[i-1] }}</td>
+                        <td>{{ test[i-1] }}</td>
+                    </tr>
+
+                    {%  endfor %}
+                    <tr><td>Сумма</td><td>{{ summ }}</td><td>Итог</td><td>
+                        {% if summ == 0 %}
+                            {{ 0 }}
+                        {% elif summ == 1 %}
+                        {{ 4 }}
+                        {% elif summ == 2 %}
+                        {{  14 }}
+                        {% elif summ == 3 %}
+                        {{ 20 }}
+                        {% elif summ == 4 %}
+                        {{  27 }}
+                        {% elif summ == 5 %}
+                        {{  34 }}
+                        {% elif summ == 6 %}
+                        {{ 40 }}
+                        {% elif summ == 7 %}
+                        {{ 43 }}
+                        {% elif summ == 8 %}
+                        {{ 45 }}
+                        {% elif summ == 9 %}
+                        {{ 48 }}
+                        {% elif summ == 10 %}
+                        {{ 50 }}
+                        {% elif summ == 11 %}
+                        {{ 53 }}
+                        {% elif summ == 12 %}
+                        {{ 55 }}
+                        {% elif summ == 13 %}
+                        {{ 58 }}
+                        {% elif summ == 14 %}
+                        {{ 60 }}
+                        {% elif summ == 15 %}
+                            {{ 63 }}
+                        {% elif summ == 16 %}
+                            {{ 65 }}
+                        {% elif summ == 17 %}
+                            {{ 68 }}
+                        {% elif summ == 18 %}
+                            {{ 70 }}
+                        {% elif summ == 19 %}
+                            {{ 73 }}
+                        {% elif summ == 20 %}
+                            {{ 75 }}
+                        {% elif summ == 21 %}
+                            {{ 78 }}
+                        {% elif summ == 22 %}
+                            {{ 80 }}
+                        {% elif summ == 23 %}
+                            {{ 83 }}
+                        {% elif summ == 24 %}
+                            {{ 85 }}
+                        {% elif summ == 25 %}
+                            {{ 88 }}
+                        {% elif summ == 26 %}
+                            {{ 90 }}
+                        {% elif summ == 27 %}
+                            {{ 93 }}
+                        {% elif summ == 28 %}
+                            {{ 95 }}
+                        {% elif summ == 29 %}
+                            {{ 98 }}
+                        {% elif summ == 30 %}
+                            {{ 100 }}
+
+                        {% endif %}
+                    </td></tr>
+                </table>
+            </div>
+        <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}

@@ -13,7 +13,9 @@ from app.models import Users, Groups, Tests, Test_started
 @app.route('/index')
 def index():
     tests = Tests.query.order_by(Tests.time_added.desc())
-    return render_template('index.html', title='Эмулятор КЕГЭ по информатике', tests=tests)
+    #TODO переделать просмотр пройденных
+    started= Test_started.query.filter_by(user_id=current_user.user_id,ended=1).order_by(Test_started.time_end)
+    return render_template('index.html', title='Эмулятор КЕГЭ по информатике', tests=tests, tests_started=started)
 
 
 @app.route('/test/<test>')
@@ -95,23 +97,45 @@ def taskcheck():
 def finishtest():
     #скрипт завершения теста пользователем
     if 'try' in session:
-        try_ = session['try']        #TODO не работает --- доделать с join
+        try_ = session['try']        #доделать с join
         currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
         test = currentTry.test_id
         currentTest = Tests.query.filter_by(test_id=test).first_or_404()
         currentTry.ended = True
         currentTry.time_end = datetime.now()
         db.session.commit()
-        return render_template('finishtest.html', title='Результаты теста '+currentTest.test_name, answers=currentTry, trueAnswers=currentTest)
+        return json.dumps({'success': 'true', 'msg': try_})
     else:
-        pass
+        return redirect(url_for('showresult'))
 
 
-@app.route('/showresult/<test>')
+@app.route('/showresult')
 @login_required
 def showresult():
-    pass
-    #TODO скрипт просмотра результатов теста
+    if 'try' in session:
+        try_ = session.pop('try')
+        currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
+        currentAnswers = [currentTry.task_1, currentTry.task_2, currentTry.task_3, currentTry.task_4, currentTry.task_5, currentTry.task_6, currentTry.task_7,
+                          currentTry.task_8, currentTry.task_9, currentTry.task_10, currentTry.task_11, currentTry.task_12, currentTry.task_13,
+                          currentTry.task_14,currentTry.task_15, currentTry.task_16, currentTry.task_17, currentTry.task_18 , currentTry.task_19,
+                          currentTry.task_20, currentTry.task_21, currentTry.task_22, currentTry.task_23, currentTry.task_24, currentTry.task_25,
+                          currentTry.task_26, currentTry.task_27]
+        test = currentTry.test_id
+
+        currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+        curTest = [currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
+                       currentTest.task_6, currentTest.task_7,
+                       currentTest.task_8, currentTest.task_9, currentTest.task_10, currentTest.task_11,
+                       currentTest.task_12, currentTest.task_13,
+                       currentTest.task_14, currentTest.task_15, currentTest.task_16, currentTest.task_17,
+                       currentTest.task_18, currentTest.task_19,
+                       currentTest.task_20, currentTest.task_21, currentTest.task_22, currentTest.task_23,
+                       currentTest.task_24, currentTest.task_25,
+                       currentTest.task_26, currentTest.task_27]
+
+        return render_template('showresult.html', title='Результаты теста', currentAnswers=currentAnswers, test=curTest)
+    else:
+        return render_template('showresult.html')
 
 
 @app.route('/test1/')
