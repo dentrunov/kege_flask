@@ -14,8 +14,10 @@ from app.models import Users, Groups, Tests, Test_started
 def index():
     tests = Tests.query.order_by(Tests.time_added.desc())
     #TODO переделать просмотр пройденных
-    started= Test_started.query.filter_by(user_id=current_user.user_id,ended=1).order_by(Test_started.time_end)
-    return render_template('index.html', title='Эмулятор КЕГЭ по информатике', tests=tests, tests_started=started)
+    if current_user.is_authenticated:
+        started = Test_started.query.filter_by(user_id=current_user.user_id, ended=1).order_by(Test_started.time_end)
+    #return render_template('index.html', title='Эмулятор КЕГЭ по информатике', tests=tests, tests_started=started)
+    return render_template('index.html', title='Эмулятор КЕГЭ по информатике', tests=tests)
 
 
 @app.route('/test/<test>')
@@ -138,17 +140,13 @@ def showresult():
         return render_template('showresult.html')
 
 
-@app.route('/test1/')
+@app.route('/test_list')
 #@login_required
-#временная заглушка
-def test1():
-    answerSimpleForm = [AnswerSimpleForm(answerNumber=i) for i in range(1, 29)]
-    answerTwoForm = [AnswerTwoForm(answerNumber=i) for i in range(1, 29)]
-    answerManyForm = [AnswerManyForm(answerNumber=i) for i in range(1, 29)]
-
-    return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
-                           answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
-                           answerManyForm=answerManyForm)
+#TODO список доступных тестов (убрать с главной)
+def test_list():
+    tests = Tests.query.order_by(Tests.time_added.desc())
+    return render_template('test_list.html', title='Выбор варианта КЕГЭ по информатике',
+                           tests=tests)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -197,7 +195,7 @@ def user(username):
     user_ = Users.query.filter_by(username=username).first_or_404()
     tests = Tests.query.order_by(Tests.time_added.desc())
     statuses = ('Неактивирован', 'Пользователь', 'Администратор', 'Ученик', 'Учитель', 'Родитель')
-    role = statuses[user.role]
+    role = statuses[user_.role]
     return render_template('user.html', user=user_, role=role, tests=tests)
 
 
