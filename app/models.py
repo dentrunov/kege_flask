@@ -18,7 +18,7 @@ class Groups(db.Model):
 
 class Users(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
-    user_ = db.Column(db.String(64))
+    user = db.Column(db.String(64))
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
