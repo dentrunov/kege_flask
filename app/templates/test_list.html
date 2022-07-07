@@ -24,7 +24,24 @@
                         <li><a href="{{ url_for('test', test=test.test_id) }}">{{ test.test_name }}</a> ({{ test.time_added.strftime('%d.%m.%Y') }})</li>
                     {% endfor %}
                     </ul>
-
+                    <h3>Незавершенные тесты</h3
+                    {% if tests_not_done %}>
+                        <ul class="course_list">
+                        {% for test_nd in tests_not_done %}
+                            <!--TODO доделать имена тестов-->
+                            <li><a href="{{ url_for('test_continue', test_id=test_nd.try_id) }}">тест</a> ({{ test_nd.time_start.strftime('%d.%m.%Y %H:%I') }})</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>У вас нет незавершенных тестов</p>
+                    {% endif %}
+                    <h3>Выполненные тесты</h3>
+                    <ul class="course_list">
+                    {% for test_d in tests_done %}
+                        <!--TODO доделать имена тестов-->
+                        <li><a href="{{ url_for('showresult', try_id=test_d.try_id) }}">тест</a> ({{ test_d.time_end.strftime('%d.%m.%Y') }})</li>
+                    {% endfor %}
+                    </ul>
                 {% endif %}
             </div>
             <div class="col-2"></div>

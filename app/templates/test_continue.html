@@ -1,0 +1,24 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8" style="text-align: center">
+                <h2 style="padding-bottom: 100px">Вы хотите продолжить тест</h2>
+                <ul class="course_list">
+                    <li><a href="{{ url_for('test', test=test)  }}">Продолжить тест</a></li>
+                </ul>
+
+            </div>
+            <div class="col-2"></div>
+        </div>
+	</main>
+{% endblock %}

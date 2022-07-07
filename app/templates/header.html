@@ -29,10 +29,10 @@
                             {% if current_user.is_authenticated %}
                                 <!--TODO настроить позже-->
                                 {% if current_user.role == 3 %}
-                                <li><a class="dropdown-item" href="#">Ученик</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('user', username=current_user.username) }}">Ученик</a></li>
                                     {% endif %}
                                 {% if current_user.role == 5 %}
-                                <li><a class="dropdown-item" href="#">Родитель</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('user', username=current_user.username) }}">Родитель</a></li>
                                     {% endif %}
                                 {% if current_user.role == 4 or current_user.role == 2 %}
                                 <li><a class="dropdown-item" href="{{ url_for('user', username=current_user.username) }}">Учитель</a></li>
@@ -51,10 +51,12 @@
                     {% if request.url.split('/')[-2] == 'test' %}
 
 					<li class="nav-item">
-						<a class="nav-link active" href="#" id="endtest"">Завершить</a>
+						<a class="nav-link active" href="#" id="endtest" onclick="finish_test()">Завершить</a>
 					</li>
                     <li>
-					<span class="navbar-text">Оставшееся время - </span><span id="my_timer" class="navbar-text" style="color:red">03:55:00</span>
+					<span class="navbar-text">Оставшееся время - </span><span id="my_timer" class="navbar-text" style="color:red">
+                        {{ time_left }}
+                    </span>
 					</li>
                     {% endif %}
 

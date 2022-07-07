@@ -41,6 +41,7 @@ main {
     max-height: 500px;
     background-color: aliceblue;
     margin-top: 10vh;
+
 }
 
 .mn {
@@ -132,7 +133,7 @@ main {
 }
 input {
     margin: 0;
-    width: 120px;
+    width: 150px;
 }
 
 table.showresult {

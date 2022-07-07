@@ -10,6 +10,8 @@ from app import login, db
 class Groups(db.Model):
     group_id = db.Column(db.Integer, primary_key=True)
     gr_name = db.Column(db.String(64), index=True, unique=True)
+    #TODO Не пройдена миграция сделать обязательно
+    #group_owner = db.Column(db.ForeignKey('users.user_id'),default=None)
     stud_year = (db.String(64))
 
     def __repr__(self):
@@ -69,10 +71,14 @@ class Tests(db.Model):
 class Test_started(db.Model):
     try_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.ForeignKey('users.user_id'), default=1)
-    test_id = db.Column(db.ForeignKey('tests.test_id'), default=1)
+    test_id = db.Column(db.ForeignKey('tests.test_id'))
     time_start = db.Column(db.DateTime, index=True, default=datetime.now)
+    time_left = db.Column(db.Integer, default=235*60)
     time_end = db.Column(db.DateTime, index=True)
     ended = db.Column(db.Boolean, index=True, default=False)
+    test_name = db.Column(db.String(64))
+    #не смог удалить это поле в SQLite
+    path = db.Column(db.String(64))
     for i in range(1, 28):
         locals()['task_'+str(i)] = db.Column(db.String(64))
     primary_mark = db.Column(db.Integer, default=0)

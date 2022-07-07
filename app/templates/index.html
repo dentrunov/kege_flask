@@ -21,14 +21,8 @@
                     <h3>Hi, {{ current_user.username }}!</h3>
                     <p><a href="{{ url_for('user', username=current_user.username) }}">Личный кабинет</a></p>
                     <p><a href="{{ url_for('edit_profile') }}">Изменить профиль</a></p>
-                    <p><a href="{{ url_for('test_list') }}">Перейти к выбору тестов</a></p>
-                    <!--TODO переделать просмотр пройденных-->
-                    <ul>
-                    <h3>Выполненные тесты</h3>
-                    {% for test_st in tests_started %}
-                        <li>{{ test_st.try_id }}({{ test_st.time_end.strftime('%d.%m.%Y') }})</li>
-                    {% endfor %}
-                    </ul>
+                    <p><a href="{{ url_for('test_list') }}">Перейти к выбору и просмотру тестов</a></p>
+
                 {% endif %}
             </div>
             <div class="col-2"></div>

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 import json
 
 from flask import render_template, flash, redirect, url_for, request, session
@@ -12,12 +12,7 @@ from app.models import Users, Groups, Tests, Test_started
 @app.route('/')
 @app.route('/index')
 def index():
-    tests = Tests.query.order_by(Tests.time_added.desc())
-    #TODO переделать просмотр пройденных
-    if current_user.is_authenticated:
-        started = Test_started.query.filter_by(user_id=current_user.user_id, ended=1).order_by(Test_started.time_end)
-    #return render_template('index.html', title='Эмулятор КЕГЭ по информатике', tests=tests, tests_started=started)
-    return render_template('index.html', title='Эмулятор КЕГЭ по информатике', tests=tests)
+    return render_template('index.html', title='Эмулятор КЕГЭ по информатике')
 
 
 @app.route('/test/<test>')
@@ -29,6 +24,8 @@ def test(test):
     answerManyForm = [AnswerManyForm() for i in range(1, 29)]
     #читаем задания теста из БД
     currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+    #t = 1000
+    t = 235*60
     if not ('try' in session):
         #создаем новую записть прохождения теста
         newTest = Test_started(user_id=current_user.user_id, test_id=test)
@@ -36,10 +33,16 @@ def test(test):
         db.session.commit()
         #создаем сессию
         session['try'] = newTest.try_id
+        #работа с таймером - стартуем полный таймер
+        time_left = time(t//60//60, t//60%60, t%60)
     else:
-        #если тест уже начат TODO проверить проверку на завершенность
+        #если тест уже начат
         #читаем данные начатого теста
         newTest = Test_started.query.filter_by(try_id=session['try']).first()
+        #работа с таймером - вычисляем оставшееся время
+        t1 = t - newTest.time_left
+        print(t1)
+        time_left = time(t1//60//60, t1//60%60, t1%60)
         for i in range(1,28):
             if getattr(newTest,'task_'+str(i)) is not None:
                 if i in (17,18,20,26,27):
@@ -55,17 +58,17 @@ def test(test):
     testName = currentTest.test_name
     test_path = currentTest.path
     #записываем ответы на задания TODO пересмотреть этот момент
-    test_tasks = [currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
+    test_tasks = (currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
                   currentTest.task_6, currentTest.task_7, currentTest.task_8,currentTest.task_9, currentTest.task_10,
                   currentTest.task_11, currentTest.task_12, currentTest.task_13, currentTest.task_14, currentTest.task_15,
                   currentTest.task_16, currentTest.task_17, currentTest.task_18, currentTest.task_19, currentTest.task_20,
                   currentTest.task_21, currentTest.task_22, currentTest.task_23, currentTest.task_24, currentTest.task_25,
-                  currentTest.task_26, currentTest.task_27]
+                  currentTest.task_26, currentTest.task_27)
 
     #генерируем рендер
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
                            answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
-                           answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks, test_path=test_path)
+                           answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks, test_path=test_path, time_left=time_left)
 
 
 @app.route('/taskcheck', methods=['POST'])
@@ -88,44 +91,33 @@ def taskcheck():
             field = request.form.get('answerField')
         answer = Test_started.query.filter_by(try_id=session['try']).first()
         setattr(answer, 'task_'+task_number, field)
+        delta = datetime.now() - answer.time_start
+        answer.time_left = int(delta.seconds)
         db.session.commit()
         return json.dumps({'success': 'true', 'msg': 'Сохранено'})
     else:
-        return json.dumps({'success': 'false', 'msg': 'Плохо'})
+        return json.dumps({'success': 'false', 'msg': 'Ошибка сохранения, обратитесь к администратору'})
 
 
-@app.route('/finishtest')
+@app.route('/showresult/<try_id>')
 @login_required
-def finishtest():
-    #скрипт завершения теста пользователем
+def showresult(try_id):
     if 'try' in session:
-        try_ = session['try']        #доделать с join
-        currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
-        test = currentTry.test_id
-        currentTest = Tests.query.filter_by(test_id=test).first_or_404()
-        currentTry.ended = True
-        currentTry.time_end = datetime.now()
-        db.session.commit()
-        return json.dumps({'success': 'true', 'msg': try_})
-    else:
-        return redirect(url_for('showresult'))
+        session.pop('try')
+    #TODO Вот тут доделать с JOIN
+    #currentTry = Test_started.query.filter_by(try_id=try_id).join(Tests).first_or_404()
 
-
-@app.route('/showresult')
-@login_required
-def showresult():
-    if 'try' in session:
-        try_ = session.pop('try')
-        currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
-        currentAnswers = [currentTry.task_1, currentTry.task_2, currentTry.task_3, currentTry.task_4, currentTry.task_5, currentTry.task_6, currentTry.task_7,
+    currentTry = Test_started.query.filter_by(try_id=try_id).first_or_404()
+    #print(currentTry)
+    currentAnswers = (currentTry.task_1, currentTry.task_2, currentTry.task_3, currentTry.task_4, currentTry.task_5, currentTry.task_6, currentTry.task_7,
                           currentTry.task_8, currentTry.task_9, currentTry.task_10, currentTry.task_11, currentTry.task_12, currentTry.task_13,
                           currentTry.task_14,currentTry.task_15, currentTry.task_16, currentTry.task_17, currentTry.task_18 , currentTry.task_19,
                           currentTry.task_20, currentTry.task_21, currentTry.task_22, currentTry.task_23, currentTry.task_24, currentTry.task_25,
-                          currentTry.task_26, currentTry.task_27]
-        test = currentTry.test_id
+                          currentTry.task_26, currentTry.task_27)
+    test = currentTry.test_id
 
-        currentTest = Tests.query.filter_by(test_id=test).first_or_404()
-        curTest = [currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
+    currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+    curTest = (currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
                        currentTest.task_6, currentTest.task_7,
                        currentTest.task_8, currentTest.task_9, currentTest.task_10, currentTest.task_11,
                        currentTest.task_12, currentTest.task_13,
@@ -133,20 +125,28 @@ def showresult():
                        currentTest.task_18, currentTest.task_19,
                        currentTest.task_20, currentTest.task_21, currentTest.task_22, currentTest.task_23,
                        currentTest.task_24, currentTest.task_25,
-                       currentTest.task_26, currentTest.task_27]
+                       currentTest.task_26, currentTest.task_27)
 
-        return render_template('showresult.html', title='Результаты теста', currentAnswers=currentAnswers, test=curTest)
-    else:
-        return render_template('showresult.html')
+    return render_template('showresult.html', title='Результаты теста '+currentTest.test_name+' '+currentTry.time_end.strftime('%d.%m.%Y'), currentAnswers=currentAnswers, test=curTest)
 
 
 @app.route('/test_list')
-#@login_required
-#TODO список доступных тестов (убрать с главной)
+@login_required
 def test_list():
-    tests = Tests.query.order_by(Tests.time_added.desc())
+    #просмотр тестов
+    tests = Tests.query.order_by(Tests.time_added.desc()).limit(10)
+    test_not_done = Test_started.query.filter_by(user_id=current_user.user_id, time_end=None).order_by(Test_started.time_start.desc()).limit(10)
+    tests_done = Test_started.query.filter(Test_started.user_id == current_user.user_id, Test_started.time_end !=None).order_by(Test_started.time_start.desc()).limit(10)
     return render_template('test_list.html', title='Выбор варианта КЕГЭ по информатике',
-                           tests=tests)
+                           tests=tests,tests_not_done=test_not_done, tests_done=tests_done)
+
+@app.route('/test_continue/<test_id>')
+@login_required
+def test_continue(test_id):
+    #продолжение незавершенного теста
+    test = Test_started.query.filter_by(try_id=test_id).first()
+    session['try'] = test.try_id
+    return render_template('test_continue.html', title='Вы хотите продолжить тест', test=test.test_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -193,10 +193,16 @@ def register():
 @login_required
 def user(username):
     user_ = Users.query.filter_by(username=username).first_or_404()
-    tests = Tests.query.order_by(Tests.time_added.desc())
+    tests = Tests.query.order_by(Tests.time_added.desc()).all()
     statuses = ('Неактивирован', 'Пользователь', 'Администратор', 'Ученик', 'Учитель', 'Родитель')
     role = statuses[user_.role]
-    return render_template('user.html', user=user_, role=role, tests=tests)
+    if current_user.role in (2,4):
+        groups = Groups.query.all()
+        users = Users.query.filter_by(group_id=1, role=3).all()
+        admin_users_info = {'groups':groups, 'users':users}
+    else:
+        admin_users_info = (None,)
+    return render_template('user.html', user=user_, role=role, tests=tests, admin_users_info=admin_users_info)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -293,6 +299,29 @@ def newgroup():
         pass
     return render_template('newgroup.html', title='Добавление группы', form=form)
 
+@app.route('/showgroup/<gr>')
+@login_required
+def showgroup(gr):
+    #страница просмотра списка группы (результаты тестов)
+    group = Groups.query.filter_by(group_id=gr).first_or_404()
+    users = Users.query.filter_by(group_id=gr).all()
+    return render_template('showgroup.html', title='Список группы {}'.format(group.gr_name), group=group, users=users)
+
+@app.route('/showuser_result/<usr>')
+@login_required
+def showuser_result(usr):
+    #страница просмотра списка теста пользователя
+    user_ = Users.query.filter_by(username=usr).first_or_404()
+    user_tests = Test_started.query.filter_by(user_id=user_.user_id).all()
+    return render_template('showuser.html', title='Список тестов пользователя {}'.format(user_.user_), usr=user_, tests=user_tests)
+
+@app.route('/showtest_allusers/<test>')
+@login_required
+def showtest_allusers(test):
+    #TODO страница просмотра результатов всех пользователей по тесту
+    #TODO сделать сохранение результатов после первого пересчета в БД и предпоказ на странице просмотра списка пройденных тестов
+    pass
+
 @app.route('/admin_result')
 @login_required
 def admin_result():
@@ -305,3 +334,21 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_visit_time = datetime.now()
         db.session.commit()
+
+
+@app.route('/finishtest')
+@login_required
+def finishtest():
+    #скрипт завершения теста пользователем
+    if 'try' in session:
+        try_ = session['try']        #доделать с join
+        currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
+        #test = currentTry.test_id
+        #currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+        currentTry.ended = True
+        currentTry.time_end = datetime.now()
+        db.session.commit()
+        return json.dumps({'success': 'true', 'msg': try_})
+
+    else:
+        return redirect(url_for('test_list'))

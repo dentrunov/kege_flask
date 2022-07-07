@@ -100,21 +100,21 @@ $(document).ready(function() {
     });
 });
 
-$(document).ready(function() {
+
     //функция завершения теста
-     $("#endtest").click(function(event) {
+ function finish_test() {
+     event.preventDefault()
          var end = confirm('Вы хотите завершить тест?')
          if (end) {
               $.ajax({
             url: "/finishtest",
             success: function(result) {
-                location.href = '../showresult'
+                location.href = '../showresult/'+$.parseJSON(result).msg;
             }
         });
          };
         event.stopImmediatePropagation();
-     });
-});
+     };
 
     function startTimer() {
         var my_timer = document.getElementById("my_timer");
