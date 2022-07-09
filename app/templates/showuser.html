@@ -15,7 +15,7 @@
                 <h1>Тесты пользователя {{ usr.user_ }}</h1>
                 <ul class="course_list">
                     {% for test in tests %}
-                        <li><a href="{{ url_for('showresult', try_id=test.try_id) }}">{{ test.test_name }}</a> ({{ test.time_end.strftime('%d.%m.%Y') }})</li>
+                        <li><a href="{{ url_for('showresult', try_id=test.try_id) }}">{{ test.test_name }} Завершен - ({{ test.time_end.strftime('%d.%m.%Y') }})</a> - {{ test.primary_mark }} баллов - {{ test.final_mark }} баллов</li>
                     {% endfor %}
                 </ul>
 

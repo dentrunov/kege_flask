@@ -28,7 +28,7 @@ def test(test):
     t = 235*60
     if not ('try' in session):
         #создаем новую записть прохождения теста
-        newTest = Test_started(user_id=current_user.user_id, test_id=test)
+        newTest = Test_started(user_id=current_user.user_id, test_id=test,test_name=currentTest.test_name)
         db.session.add(newTest)
         db.session.commit()
         #создаем сессию
@@ -41,8 +41,8 @@ def test(test):
         newTest = Test_started.query.filter_by(try_id=session['try']).first()
         #работа с таймером - вычисляем оставшееся время
         t1 = t - newTest.time_left
-        print(t1)
         time_left = time(t1//60//60, t1//60%60, t1%60)
+        # создание форм для заданий, заполнение уже данными ответами
         for i in range(1,28):
             if getattr(newTest,'task_'+str(i)) is not None:
                 if i in (17,18,20,26,27):
@@ -58,12 +58,14 @@ def test(test):
     testName = currentTest.test_name
     test_path = currentTest.path
     #записываем ответы на задания TODO пересмотреть этот момент
-    test_tasks = (currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
+    test_tasks = (getattr(currentTest, 'task_'+str(i)) for i in range (1,28))
+    #оставлю для истории)
+    '''test_tasks = (currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
                   currentTest.task_6, currentTest.task_7, currentTest.task_8,currentTest.task_9, currentTest.task_10,
                   currentTest.task_11, currentTest.task_12, currentTest.task_13, currentTest.task_14, currentTest.task_15,
                   currentTest.task_16, currentTest.task_17, currentTest.task_18, currentTest.task_19, currentTest.task_20,
                   currentTest.task_21, currentTest.task_22, currentTest.task_23, currentTest.task_24, currentTest.task_25,
-                  currentTest.task_26, currentTest.task_27)
+                  currentTest.task_26, currentTest.task_27)'''
 
     #генерируем рендер
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
@@ -79,13 +81,11 @@ def taskcheck():
         task_number = request.form.get('answerNumber')
         if int(task_number) in (17, 18, 20, 26, 27):
             field = request.form.get('answerField1') + ';' + request.form.get('answerField2')
-            print(field)
         elif int(task_number) == 25:
             field = ''
             for i in range(1, 11):
                 if request.form.get('answerField' + str(i)) is not None:
                     field += (request.form.get('answerField' + str(i)) + ';')
-                    print(field)
             field = field.rstrip(';')
         else:
             field = request.form.get('answerField')
@@ -104,11 +104,10 @@ def taskcheck():
 def showresult(try_id):
     if 'try' in session:
         session.pop('try')
-    #TODO Вот тут доделать с JOIN
-    #currentTry = Test_started.query.filter_by(try_id=try_id).join(Tests).first_or_404()
+    #TODO Вот тут доделать с JOIN и вообще пересмотреть весь скрипт и вью
 
     currentTry = Test_started.query.filter_by(try_id=try_id).first_or_404()
-    #print(currentTry)
+
     currentAnswers = (currentTry.task_1, currentTry.task_2, currentTry.task_3, currentTry.task_4, currentTry.task_5, currentTry.task_6, currentTry.task_7,
                           currentTry.task_8, currentTry.task_9, currentTry.task_10, currentTry.task_11, currentTry.task_12, currentTry.task_13,
                           currentTry.task_14,currentTry.task_15, currentTry.task_16, currentTry.task_17, currentTry.task_18 , currentTry.task_19,
@@ -126,8 +125,28 @@ def showresult(try_id):
                        currentTest.task_20, currentTest.task_21, currentTest.task_22, currentTest.task_23,
                        currentTest.task_24, currentTest.task_25,
                        currentTest.task_26, currentTest.task_27)
+    if currentTry.primary_mark == 0:
+        summ = 0
+        for i in range(len(currentAnswers)):
+            if curTest[i] == currentAnswers[i]:
+                summ += 1
+        #TODO переписать автозаполнение
+        mark = {0:0, 1:4, 2:14, 3:20, 4:27, 5:34, 6:40, 7:43, 8:45, 9:48, 10:50, 11:53, 12:55, 13:58, 14:60, 15:63, 16:65, 17:68, 18:70, 19:73, 20:75, 21:78, 22:80, 23:83,
+                24:85, 25:88, 26:90, 27:93, 28:95, 29:98, 30:100}
+        m = mark[summ]
+        currentTry.primary_mark = summ
+        currentTry.final_mark = m
+        db.session.commit()
 
-    return render_template('showresult.html', title='Результаты теста '+currentTest.test_name+' '+currentTry.time_end.strftime('%d.%m.%Y'), currentAnswers=currentAnswers, test=curTest)
+    else:
+        summ = currentTry.primary_mark
+        m = currentTry.final_mark
+    test_name = currentTry.test_name
+    #TODO и всё-таки оптимизировать этот запрос c JOIN
+    cur_user = Users.query.filter_by(user_id=currentTry.user_id).first_or_404()
+    usr = cur_user.user_
+    return render_template('showresult.html', title='Результаты теста '+currentTest.test_name+' '+currentTry.time_end.strftime('%d.%m.%Y'),
+                           currentAnswers=currentAnswers, test=curTest, summ=summ, mark=m, test_name=test_name, usr=usr)
 
 
 @app.route('/test_list')
@@ -135,8 +154,8 @@ def showresult(try_id):
 def test_list():
     #просмотр тестов
     tests = Tests.query.order_by(Tests.time_added.desc()).limit(10)
-    test_not_done = Test_started.query.filter_by(user_id=current_user.user_id, time_end=None).order_by(Test_started.time_start.desc()).limit(10)
-    tests_done = Test_started.query.filter(Test_started.user_id == current_user.user_id, Test_started.time_end !=None).order_by(Test_started.time_start.desc()).limit(10)
+    test_not_done = Test_started.query.filter_by(user_id=current_user.user_id, time_end=None).order_by(Test_started.time_start.desc())
+    tests_done = Test_started.query.filter(Test_started.user_id == current_user.user_id, Test_started.time_end != None).order_by(Test_started.time_start.desc())
     return render_template('test_list.html', title='Выбор варианта КЕГЭ по информатике',
                            tests=tests,tests_not_done=test_not_done, tests_done=tests_done)
 
@@ -261,7 +280,7 @@ def adminpage_newtest():
         flash('Тест сохранен')
         return redirect(url_for('adminpage_newtest'))
     elif request.method == 'GET':
-        print(1)
+        pass
     return render_template('adminpage_newtest.html', title='Добавление теста', form=form, tests=tests)
 
 
@@ -302,7 +321,7 @@ def newgroup():
 @app.route('/showgroup/<gr>')
 @login_required
 def showgroup(gr):
-    #страница просмотра списка группы (результаты тестов)
+    #страница просмотра списка группы (результаты тестов) TODO переписать с JOIN
     group = Groups.query.filter_by(group_id=gr).first_or_404()
     users = Users.query.filter_by(group_id=gr).all()
     return render_template('showgroup.html', title='Список группы {}'.format(group.gr_name), group=group, users=users)
@@ -310,7 +329,7 @@ def showgroup(gr):
 @app.route('/showuser_result/<usr>')
 @login_required
 def showuser_result(usr):
-    #страница просмотра списка теста пользователя
+    #страница просмотра списка теста пользователя TODO переписать с JOIN
     user_ = Users.query.filter_by(username=usr).first_or_404()
     user_tests = Test_started.query.filter_by(user_id=user_.user_id).all()
     return render_template('showuser.html', title='Список тестов пользователя {}'.format(user_.user_), usr=user_, tests=user_tests)
@@ -318,9 +337,9 @@ def showuser_result(usr):
 @app.route('/showtest_allusers/<test>')
 @login_required
 def showtest_allusers(test):
-    #TODO страница просмотра результатов всех пользователей по тесту
-    #TODO сделать сохранение результатов после первого пересчета в БД и предпоказ на странице просмотра списка пройденных тестов
-    pass
+    current_test = Test_started.query.filter_by(test_id=test).order_by(Test_started.time_end.desc()).join(Users, Users.user_id==Test_started.user_id).add_columns(Users.user_, Users.username, Test_started.try_id,
+                                                                                                                           Test_started.test_name, Test_started.time_end, Test_started.primary_mark, Test_started.final_mark)
+    return render_template('showtest.html', title='Список пользователей, выполнивших тест', tests=current_test)
 
 @app.route('/admin_result')
 @login_required

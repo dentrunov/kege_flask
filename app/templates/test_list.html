@@ -39,7 +39,7 @@
                     <ul class="course_list">
                     {% for test_d in tests_done %}
                         <!--TODO доделать имена тестов-->
-                        <li><a href="{{ url_for('showresult', try_id=test_d.try_id) }}">тест</a> ({{ test_d.time_end.strftime('%d.%m.%Y') }})</li>
+                        <li><a href="{{ url_for('showresult', try_id=test_d.try_id) }}">тест Завершен ({{ test_d.time_end.strftime('%d.%m.%Y') }})</a> - {{ test_d.primary_mark }} баллов - {{ test_d.final_mark }} баллов</li>
                     {% endfor %}
                     </ul>
                 {% endif %}

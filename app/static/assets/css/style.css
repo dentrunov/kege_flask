@@ -38,10 +38,9 @@ show {
 
 main {
     height: auto;
-    max-height: 500px;
+    min-height: 85.5vh;
     background-color: aliceblue;
     margin-top: 10vh;
-
 }
 
 .mn {
@@ -148,6 +147,7 @@ table.showresult {
 footer {
     background-color: navy;
     height: auto;
+    min-height: 4.5vh;
     width: 100%;
 }
 

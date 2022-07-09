@@ -1,0 +1,27 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+        <div class="col-3"></div>
+            <div class="col-6">
+            <a href="{{ url_for('test_list') }}">К списку тестов</a>  <a href="{{ url_for('user', username=current_user.username) }}">В личный кабинет</a>
+                <h1>Результаты выполнения теста {{ tests[0].test_name }}</h1>
+                <ul class="course_list">
+                    {% for test in tests %}
+                        <li><a href="{{ url_for('showuser_result', usr=test.username) }}">{{ test.user_ }}</a> <a href="{{ url_for('showresult', try_id=test.try_id) }}">Завершен ({{ test.time_end.strftime('%d.%m.%Y') }}) </a> - {{ test.primary_mark }} баллов - {{ test.final_mark }} баллов</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}

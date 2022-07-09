@@ -50,7 +50,7 @@
                 <h3>Тесты</h3>
                     <ul class="course_list">
                     {% for test in tests %}
-                        <li><a href="{{ url_for('test', test=test.test_id) }}">{{ test.test_name }}</a> ({{ test.time_added.strftime('%d.%m.%Y') }})</li>
+                        <li><a href="{{ url_for('showtest_allusers', test=test.test_id) }}">{{ test.test_name }}</a> ({{ test.time_added.strftime('%d.%m.%Y') }})</li>
                     {% endfor %}
                     </ul>
             {% endif %}

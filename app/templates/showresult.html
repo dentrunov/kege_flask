@@ -12,8 +12,8 @@
         <div class="row">
         <div class="col-3"></div>
             <div class="col-6">
-                <a href="{{ url_for('test_list') }}">К списку тестов</a>
-                <h1>Результаты теста</h1>
+                <a href="{{ url_for('test_list') }}">К списку тестов</a>  <a href="{{ url_for('user', username=current_user.username) }}">В личный кабинет</a>
+                <h1>Результаты теста {{ test_name }} пользователя {{ usr }}</h1>
                 <table class="showresult">
                     <tr><td>№ п/п</td><td>Балл</td><td>Ответ</td><td>Верный ответ</td></tr>
                 {% set summ = 0 %}
@@ -34,72 +34,12 @@
                     </tr>
 
                     {%  endfor %}
-                    <tr><td>Сумма</td><td>{{ summ }}</td><td>Итог</td><td>
-                        {% if summ == 0 %}
-                            {{ 0 }}
-                        {% elif summ == 1 %}
-                        {{ 4 }}
-                        {% elif summ == 2 %}
-                        {{  14 }}
-                        {% elif summ == 3 %}
-                        {{ 20 }}
-                        {% elif summ == 4 %}
-                        {{  27 }}
-                        {% elif summ == 5 %}
-                        {{  34 }}
-                        {% elif summ == 6 %}
-                        {{ 40 }}
-                        {% elif summ == 7 %}
-                        {{ 43 }}
-                        {% elif summ == 8 %}
-                        {{ 45 }}
-                        {% elif summ == 9 %}
-                        {{ 48 }}
-                        {% elif summ == 10 %}
-                        {{ 50 }}
-                        {% elif summ == 11 %}
-                        {{ 53 }}
-                        {% elif summ == 12 %}
-                        {{ 55 }}
-                        {% elif summ == 13 %}
-                        {{ 58 }}
-                        {% elif summ == 14 %}
-                        {{ 60 }}
-                        {% elif summ == 15 %}
-                            {{ 63 }}
-                        {% elif summ == 16 %}
-                            {{ 65 }}
-                        {% elif summ == 17 %}
-                            {{ 68 }}
-                        {% elif summ == 18 %}
-                            {{ 70 }}
-                        {% elif summ == 19 %}
-                            {{ 73 }}
-                        {% elif summ == 20 %}
-                            {{ 75 }}
-                        {% elif summ == 21 %}
-                            {{ 78 }}
-                        {% elif summ == 22 %}
-                            {{ 80 }}
-                        {% elif summ == 23 %}
-                            {{ 83 }}
-                        {% elif summ == 24 %}
-                            {{ 85 }}
-                        {% elif summ == 25 %}
-                            {{ 88 }}
-                        {% elif summ == 26 %}
-                            {{ 90 }}
-                        {% elif summ == 27 %}
-                            {{ 93 }}
-                        {% elif summ == 28 %}
-                            {{ 95 }}
-                        {% elif summ == 29 %}
-                            {{ 98 }}
-                        {% elif summ == 30 %}
-                            {{ 100 }}
-
-                        {% endif %}
-                    </td></tr>
+                    <tr>
+                        <td>Сумма</td>
+                        <td>{{ summ }}</td>
+                        <td>Итог</td>
+                        <td>{{ mark }}</td>
+                    </tr>
                 </table>
             </div>
         <div class="col-3"></div>
