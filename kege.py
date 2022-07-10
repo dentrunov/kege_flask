@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Users, Groups, Tests, Test_started
+from app.models import Users, Groups, Tests, Test_started, Parents
 
 
 @app.shell_context_processors

@@ -29,6 +29,13 @@
                         <span style="color:red">[{{ error }}]</span>
                         {%  endfor %}
                     </p>
+                    <p id="parent_email">
+                        {{ form.parent_email.label }}
+                        {{ form.parent_email }}
+                        {% for error in form.role.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                    </p>
 
                 <p>{{ form.submit() }}</p>
                 </form>

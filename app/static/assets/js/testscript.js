@@ -98,7 +98,22 @@ $(document).ready(function() {
         });
         event.stopImmediatePropagation();
     });
+
+//функция показа/сокрытия родителя для ученика в форме настройки пользователя
+    $("#role").change(function (event) {
+        event.preventDefault();
+        var role = $("#role").val()
+        if (role == 3) {
+            $("#parent_email").css('display','block');
+        }
+        else {
+            $("#parent_email").css('display','none');
+        };
+    });
 });
+
+
+
 
 
     //функция завершения теста

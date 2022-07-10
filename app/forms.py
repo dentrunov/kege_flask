@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, HiddenField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
-from app.models import Users, Groups, Test_started, Tests
+from app.models import *
 
 
 class LoginForm(FlaskForm):
@@ -32,7 +32,8 @@ class RegistrationForm(FlaskForm):
 class EditProfileForm(FlaskForm):
     groups_ = Groups.query.all()
     user_ = StringField('Имя', validators=[DataRequired()])
-    role = SelectField('Выберите роль', choices=[(3, 'Ученик'), (4, 'Учитель'), (5, 'Родитель')])
+    role = SelectField('Выберите роль', choices=[(3, 'Ученик')])
+    parent_email = StringField('Email родителя', validators=[DataRequired(), Email()])
     submit = SubmitField('Сохранить')
 
 

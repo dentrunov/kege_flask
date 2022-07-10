@@ -12,7 +12,7 @@
         <div class="row">
         <div class="col-3"></div>
             <div class="col-6">
-                <h1>Спискок группы {{ group.gr_name }}</h1>
+                <h1>Спискок группы {{ users[0].gr_name }}</h1>
                 <ul class="course_list">
                     {% for usr in users %}
                         <li><a href="{{ url_for('showuser_result', usr=usr.username) }}">{{ usr.user_ }}</a></li>
