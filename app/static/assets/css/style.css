@@ -156,6 +156,9 @@ p.footer {
     margin: 10px;
 }
 
+#parent_email {
+    display: block;
+}
 @media only screen and (min-width: 220px) and (max-width: 1000px) {
     .navbar-brand {
         font-size: 12pt;
