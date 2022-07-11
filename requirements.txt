@@ -1,5 +1,4 @@
 alembic==1.8.0
-apturl==0.5.2
 bcrypt==3.1.7
 beautifulsoup4==4.8.2
 blinker==1.4
