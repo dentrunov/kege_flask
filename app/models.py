@@ -34,7 +34,7 @@ class Users(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
     role = db.Column(db.Integer, default=3) #0-default/1-user/2-admin/3-student/4-teacher/5-parent
-    group_id = db.Column(db.ForeignKey('groups.group_id'), default=1)
+    #group_id = db.Column(db.ForeignKey('groups.group_id'), default=1)
     reg_time = db.Column(db.DateTime, index=True, default=datetime.now)
     last_visit_time = db.Column(db.DateTime, default=datetime.now)
     parent_email = db.Column(db.String(120), index=True)
