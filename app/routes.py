@@ -286,6 +286,11 @@ def adminpage_newtest():
         pass
     return render_template('adminpage_newtest.html', title='Добавление теста', form=form, tests=tests)
 
+app.route('/adminpage_configtest', methods=['GET', 'POST'])
+@login_required
+def adminpage_configtest():
+    #изменение нового теста TODO
+    pass
 
 @app.route('/adminpage_edit_user/<username>', methods=['GET', 'POST'])
 @login_required
