@@ -29,7 +29,12 @@
                     {% endfor %}
                     </ul>
                 <p><a href="{{ url_for('adminpage_newtest') }}">Добавить тест</a></p>
-
+                    <h2>Список тестов</h2>
+                    <ul>
+                    {% for test in tests %}
+                        <li><a href="{{ url_for('adminpage_configtest', t_id=test.test_id) }}">{{ test.test_name }}</a></li>
+                    {% endfor %}
+                    </ul>
                 {% else %}
                     <h1>У вас нет доступа к этой странице!</h1>
                 {% endif %}

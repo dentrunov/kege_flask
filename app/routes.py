@@ -255,7 +255,8 @@ def adminpage():
     #административная страница
     usrs = Users.query.order_by(Users.user_.asc()).all()
     groups = Groups.query.order_by(Groups.gr_name.asc()).all()
-    return render_template('adminpage.html', title='Администрирование сайта', usrs=usrs, groups=groups)
+    tests = Tests.query.order_by(Tests.time_added.desc()).all()
+    return render_template('adminpage.html', title='Администрирование сайта', usrs=usrs, groups=groups, tests=tests)
 
 
 
@@ -281,16 +282,82 @@ def adminpage_newtest():
         db.session.add(new_test)
         db.session.commit()
         flash('Тест сохранен')
-        return redirect(url_for('adminpage_newtest'))
+        return redirect(url_for('adminpage'))
     elif request.method == 'GET':
         pass
     return render_template('adminpage_newtest.html', title='Добавление теста', form=form, tests=tests)
 
-app.route('/adminpage_configtest', methods=['GET', 'POST'])
+@app.route('/adminpage_configtest/<t_id>', methods=['GET', 'POST'])
 @login_required
-def adminpage_configtest():
+def adminpage_configtest(t_id):
     #изменение нового теста TODO
-    pass
+    test = Tests.query.filter_by(test_id=t_id).first_or_404()
+    form = AddNewTest()
+    if form.validate_on_submit():
+        test.path=form.pathField.data
+        test.test_name=form.testnameField.data
+        test.task_1=form.task_Field1.data
+        test.task_2=form.task_Field2.data
+        test.task_3=form.task_Field3.data
+        test.task_4=form.task_Field4.data
+        test.task_5=form.task_Field5.data
+        test.task_6=form.task_Field6.data
+        test.task_7=form.task_Field7.data
+        test.task_8=form.task_Field8.data
+        test.task_9=form.task_Field9.data
+        test.task_10=form.task_Field10.data
+        test.task_11=form.task_Field11.data
+        test.task_12=form.task_Field12.data
+        test.task_13=form.task_Field13.data
+        test.task_14=form.task_Field14.data
+        test.task_15=form.task_Field15.data
+        test.task_16=form.task_Field16.data
+        test.task_17=form.task_Field17.data
+        test.task_18=form.task_Field18.data
+        test.task_19=form.task_Field19.data
+        test.task_20=form.task_Field20.data
+        test.task_21=form.task_Field21.data
+        test.task_22=form.task_Field22.data
+        test.task_23=form.task_Field23.data
+        test.task_24=form.task_Field24.data
+        test.task_25=form.task_Field25.data
+        test.task_26=form.task_Field26.data
+        test.task_27=form.task_Field27.data
+        db.session.add(test)
+        db.session.commit()
+        flash('Тест сохранен')
+        return redirect(url_for('adminpage'))
+    else:
+        form.pathField.data = test.path
+        form.testnameField.data = test.test_name
+        form.task_Field1.data = test.task_1
+        form.task_Field2.data = test.task_2
+        form.task_Field3.data = test.task_3
+        form.task_Field4.data = test.task_4
+        form.task_Field5.data = test.task_5
+        form.task_Field6.data = test.task_6
+        form.task_Field7.data = test.task_7
+        form.task_Field8.data = test.task_8
+        form.task_Field9.data = test.task_9
+        form.task_Field10.data = test.task_10
+        form.task_Field11.data = test.task_11
+        form.task_Field12.data = test.task_12
+        form.task_Field13.data = test.task_13
+        form.task_Field14.data = test.task_14
+        form.task_Field15.data = test.task_15
+        form.task_Field16.data = test.task_16
+        form.task_Field17.data = test.task_17
+        form.task_Field18.data = test.task_18
+        form.task_Field19.data = test.task_19
+        form.task_Field20.data = test.task_20
+        form.task_Field21.data = test.task_21
+        form.task_Field22.data = test.task_22
+        form.task_Field23.data = test.task_23
+        form.task_Field24.data = test.task_24
+        form.task_Field25.data = test.task_25
+        form.task_Field26.data = test.task_26
+        form.task_Field27.data = test.task_27
+    return render_template('adminpage_edit.html', title='Изменение теста', form=form)
 
 @app.route('/adminpage_edit_user/<username>', methods=['GET', 'POST'])
 @login_required
