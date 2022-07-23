@@ -1,0 +1,29 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+        <div class="col-3"></div>
+            <div class="col-6">
+                <h1>Обучающие видеоролики</h1>
+                <ul class="course_list">
+                    {% for lesson in lessons %}
+                        <h3>{{ lesson.v_name }}</h3>
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ lesson.v_link.split('/')[-1] }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <p>{{ lesson.v_text }}</p>
+
+                    {% endfor %}
+                </ul>
+
+            </div>
+        <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}

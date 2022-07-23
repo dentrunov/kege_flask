@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, HiddenField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, HiddenField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import *
 
@@ -9,6 +9,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Имя пользователя', validators=[DataRequired()])
@@ -84,4 +85,11 @@ class AddNewTest(FlaskForm):
     testnameField = StringField('Название теста')
     for i in range(1, 28):
         locals()['task_Field'+str(i)] = StringField('Задание ' + str(i))
+    submit = SubmitField('Сохранить')
+
+
+class AddVideoForm(FlaskForm):
+    video_link = StringField('Ссылка на видео')
+    video_name = StringField('Название видео')
+    video_text = TextAreaField('Описание видео')
     submit = SubmitField('Сохранить')

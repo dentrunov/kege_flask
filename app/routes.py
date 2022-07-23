@@ -290,73 +290,33 @@ def adminpage_newtest():
 @app.route('/adminpage_configtest/<t_id>', methods=['GET', 'POST'])
 @login_required
 def adminpage_configtest(t_id):
-    #изменение нового теста TODO
+    #изменение нового теста
     test = Tests.query.filter_by(test_id=t_id).first_or_404()
     form = AddNewTest()
     if form.validate_on_submit():
-        test.path=form.pathField.data
-        test.test_name=form.testnameField.data
-        test.task_1=form.task_Field1.data
-        test.task_2=form.task_Field2.data
-        test.task_3=form.task_Field3.data
-        test.task_4=form.task_Field4.data
-        test.task_5=form.task_Field5.data
-        test.task_6=form.task_Field6.data
-        test.task_7=form.task_Field7.data
-        test.task_8=form.task_Field8.data
-        test.task_9=form.task_Field9.data
-        test.task_10=form.task_Field10.data
-        test.task_11=form.task_Field11.data
-        test.task_12=form.task_Field12.data
-        test.task_13=form.task_Field13.data
-        test.task_14=form.task_Field14.data
-        test.task_15=form.task_Field15.data
-        test.task_16=form.task_Field16.data
-        test.task_17=form.task_Field17.data
-        test.task_18=form.task_Field18.data
-        test.task_19=form.task_Field19.data
-        test.task_20=form.task_Field20.data
-        test.task_21=form.task_Field21.data
-        test.task_22=form.task_Field22.data
-        test.task_23=form.task_Field23.data
-        test.task_24=form.task_Field24.data
-        test.task_25=form.task_Field25.data
-        test.task_26=form.task_Field26.data
-        test.task_27=form.task_Field27.data
+        test.path=form.pathField.data; test.test_name=form.testnameField.data; test.task_1=form.task_Field1.data
+        test.task_2=form.task_Field2.data; test.task_3=form.task_Field3.data; test.task_4=form.task_Field4.data
+        test.task_5=form.task_Field5.data; test.task_6=form.task_Field6.data; test.task_7=form.task_Field7.data
+        test.task_8=form.task_Field8.data; test.task_9=form.task_Field9.data; test.task_10=form.task_Field10.data
+        test.task_11=form.task_Field11.data; test.task_12=form.task_Field12.data; test.task_13=form.task_Field13.data
+        test.task_14=form.task_Field14.data; test.task_15=form.task_Field15.data; test.task_16=form.task_Field16.data
+        test.task_17=form.task_Field17.data; test.task_18=form.task_Field18.data; test.task_19=form.task_Field19.data
+        test.task_20=form.task_Field20.data; test.task_21=form.task_Field21.data; test.task_22=form.task_Field22.data
+        test.task_23=form.task_Field23.data; test.task_24=form.task_Field24.data; test.task_25=form.task_Field25.data
+        test.task_26=form.task_Field26.data; test.task_27=form.task_Field27.data
         db.session.add(test)
         db.session.commit()
         flash('Тест сохранен')
         return redirect(url_for('adminpage'))
     else:
-        form.pathField.data = test.path
-        form.testnameField.data = test.test_name
-        form.task_Field1.data = test.task_1
-        form.task_Field2.data = test.task_2
-        form.task_Field3.data = test.task_3
-        form.task_Field4.data = test.task_4
-        form.task_Field5.data = test.task_5
-        form.task_Field6.data = test.task_6
-        form.task_Field7.data = test.task_7
-        form.task_Field8.data = test.task_8
-        form.task_Field9.data = test.task_9
-        form.task_Field10.data = test.task_10
-        form.task_Field11.data = test.task_11
-        form.task_Field12.data = test.task_12
-        form.task_Field13.data = test.task_13
-        form.task_Field14.data = test.task_14
-        form.task_Field15.data = test.task_15
-        form.task_Field16.data = test.task_16
-        form.task_Field17.data = test.task_17
-        form.task_Field18.data = test.task_18
-        form.task_Field19.data = test.task_19
-        form.task_Field20.data = test.task_20
-        form.task_Field21.data = test.task_21
-        form.task_Field22.data = test.task_22
-        form.task_Field23.data = test.task_23
-        form.task_Field24.data = test.task_24
-        form.task_Field25.data = test.task_25
-        form.task_Field26.data = test.task_26
-        form.task_Field27.data = test.task_27
+        form.pathField.data = test.path; form.testnameField.data = test.test_name
+        form.task_Field1.data = test.task_1; form.task_Field2.data = test.task_2; form.task_Field3.data = test.task_3; form.task_Field4.data = test.task_4
+        form.task_Field5.data = test.task_5; form.task_Field6.data = test.task_6; form.task_Field7.data = test.task_7; form.task_Field8.data = test.task_8
+        form.task_Field9.data = test.task_9; form.task_Field10.data = test.task_10; form.task_Field11.data = test.task_11; form.task_Field12.data = test.task_12
+        form.task_Field13.data = test.task_13; form.task_Field14.data = test.task_14; form.task_Field15.data = test.task_15; form.task_Field16.data = test.task_16
+        form.task_Field17.data = test.task_17; form.task_Field18.data = test.task_18; form.task_Field19.data = test.task_19; form.task_Field20.data = test.task_20
+        form.task_Field21.data = test.task_21; form.task_Field22.data = test.task_22; form.task_Field23.data = test.task_23; form.task_Field24.data = test.task_24
+        form.task_Field25.data = test.task_25; form.task_Field26.data = test.task_26; form.task_Field27.data = test.task_27
     return render_template('adminpage_edit.html', title='Изменение теста', form=form)
 
 @app.route('/adminpage_edit_user/<username>', methods=['GET', 'POST'])
@@ -413,9 +373,14 @@ def showuser_result(usr):
 @app.route('/showtest_allusers/<test>')
 @login_required
 def showtest_allusers(test):
-    #просмотр пользователей по тесту TODO сделать пагинацию
+    #просмотр пользователей по тесту TODO сделать пагинацию (пока не получается)
     current_test = Test_started.query.filter_by(test_id=test).order_by(Test_started.time_end.desc()).join(Users, Users.user_id==Test_started.user_id).add_columns(Users.user_, Users.username, Test_started.try_id,
                                                                                                                            Test_started.test_name, Test_started.time_end, Test_started.primary_mark, Test_started.final_mark)
+    #page = request.args.get('page', 1,  type=int)
+    #current_test = Test_started.query.filter_by(test_id=test).paginate(page, app.config['POSTS_PER_PAGE'], False).order_by(Test_started.time_end.desc()).join(Users,
+    #                                                                                                     Users.user_id == Test_started.user_id).add_columns(
+    #    Users.user_, Users.username, Test_started.try_id,
+    #    Test_started.test_name, Test_started.time_end, Test_started.primary_mark, Test_started.final_mark)
     return render_template('showtest.html', title='Список пользователей, выполнивших тест', tests=current_test)
 
 @app.route('/admin_result')
@@ -448,3 +413,21 @@ def finishtest():
 
     else:
         return redirect(url_for('test_list'))
+
+@app.route('/lessons', methods=['POST', 'GET'])
+def lessons():
+    #список видео
+    less = Videos.query.all()
+    return render_template('lessons.html',title='Обучающие видео', lessons=less)
+
+
+@app.route('/adminpage_addvideo', methods=['POST', 'GET'])
+def adminpage_addvideo():
+    form = AddVideoForm()
+    if form.validate_on_submit():
+        video = Videos(v_link=form.video_link.data, v_name=form.video_name.data, v_text=form.video_text.data)
+        db.session.add(video)
+        db.session.commit()
+        flash('Видео сохранено')
+        return redirect(url_for('adminpage'))
+    return render_template('adminpage_addvideo.html', title='Добавление видео', form=form)
