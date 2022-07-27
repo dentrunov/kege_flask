@@ -9,6 +9,12 @@ from app.forms import *
 from app.models import *
 
 
+def marking(x):
+    #функция возвращает итоговый балл по первичному
+    marks = (0, 4, 14, 20, 27, 34, 40, 43, 45, 48, 50, 53, 55, 58, 60, 63, 65, 68, 70, 73, 75, 78, 80, 83, 85, 88, 90, 93, 95, 100)
+    mark = {i: m for i, m in enumerate(marks)}
+    return mark[x]
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -25,6 +31,7 @@ def test(test):
     #читаем задания теста из БД
     currentTest = Tests.query.filter_by(test_id=test).first_or_404()
     #t = 1000
+    #установка времени в минутах
     t = 235*60
     if not ('try' in session):
         #создаем новую записть прохождения теста
@@ -57,7 +64,7 @@ def test(test):
     #создаем рендер страницы
     testName = currentTest.test_name
     test_path = currentTest.path
-    #записываем ответы на задания TODO пересмотреть этот момент
+    #записываем ответы на задания
     test_tasks = tuple([getattr(currentTest, 'task_'+str(i)) for i in range (1,28)])
     #оставлю для истории)
     '''test_tasks = (currentTest.task_1, currentTest.task_2, currentTest.task_3, currentTest.task_4, currentTest.task_5,
@@ -107,7 +114,6 @@ def taskcheck():
 def showresult(try_id):
     if 'try' in session:
         session.pop('try')
-    #TODO Вот тут доделать с JOIN и вообще пересмотреть весь скрипт и вью
     #запрос заданий теста
     currentTry = Test_started.query.filter_by(try_id=try_id).first_or_404()
     currentAnswers = tuple([getattr(currentTry, 'task_' + str(i)) for i in range(1, 28)])
@@ -120,12 +126,16 @@ def showresult(try_id):
     if currentTry.primary_mark == 0:
         summ = 0
         for i in range(len(currentAnswers)):
-            if curTest[i] == currentAnswers[i]:
-                summ += 1
-        #разбалловка первичного балла и запись в БД TODO вынести в глобальные переменные
-        marks = (0, 4, 14, 20, 27, 34, 40, 43, 45, 48, 50, 53, 55, 58, 60, 63, 65, 68, 70, 73, 75, 78, 80, 83, 85, 88, 90, 93, 95, 100)
-        mark = {i: m for i, m in enumerate(marks)}
-        m = mark[summ]
+            if i in (25,26):
+                if curTest[i] != None and currentAnswers[i] != None:
+                    curT = curTest[i].split(';')
+                    curA = currentAnswers[i].split(';')
+                    for i in range(2):
+                        summ += curT[i] == curA[i]
+            else:
+                summ += curTest[i] == currentAnswers[i]
+        #разбалловка первичного балла и запись в БД
+        m = marking(summ)
         currentTry.primary_mark = summ
         currentTry.final_mark = m
         db.session.commit()
@@ -422,6 +432,7 @@ def lessons():
 
 
 @app.route('/adminpage_addvideo', methods=['POST', 'GET'])
+@login_required
 def adminpage_addvideo():
     form = AddVideoForm()
     if form.validate_on_submit():

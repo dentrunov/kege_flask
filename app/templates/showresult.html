@@ -15,24 +15,59 @@
                 <a href="{{ url_for('test_list') }}">К списку тестов</a>  <a href="{{ url_for('user', username=current_user.username) }}">В личный кабинет</a>
                 <h1>Результаты теста {{ test_name }} пользователя {{ usr }}</h1>
                 <table class="showresult">
-                    <tr><td>№ п/п</td><td>Балл</td><td>Ответ</td><td>Верный ответ</td></tr>
-                {% set summ = 0 %}
-                    {% for i in range(1,28) %}
+                    <tr><td>№ п/п</td><td>Балл</td><td>Ответ</td><td>Верный ответ</td><td>№ п/п</td><td>Балл</td><td>Ответ</td><td>Верный ответ</td></tr>
+
+                    {% for i in range(1,15) %}
                         {% set ans = 0 %}
                         {% set color='red'%}
+                        {% set ans_14 = 0 %}
+                        {% set color_14 = 'red' %}
+
                         {% if currentAnswers[i-1] == test[i-1] %}
                             {% set ans=1 %}
                             {% set color='green'%}
-                            {% set summ = summ + 1 %}
                         {%  endif %}
-                    <tr style="background-color: {{ color }}">
-                        <td>{{ i }}</td>
-                        <td>{{ ans }}
-                        </td>
-                        <td>{{ currentAnswers[i-1] }}</td>
-                        <td>{{ test[i-1] }}</td>
-                    </tr>
 
+                        {% if ((i + 14) == 26 or (i + 14) == 27) %}
+                            {% set c1 = currentAnswers[i+14-1].split(';')  %}
+                            {% set c2 = test[i+14-1].split(';')  %}
+
+                            {% if c1[0] == c2[0] and c1[1] == c2[1] %}
+                                {% set ans_14 =  2%}
+                           {% elif (c1[0] == c2[0] and c1[1] != c2[1]) or (c1[0] != c2[0] and c1[1] == c2[1])  %}
+                                {% set ans_14 =  1%}
+                           {% else  %}
+                                {% set ans_14 = 0 %}
+                           {% endif %}
+                            {% if ans_14 == 1 %}
+                                {% set color_14 = 'yellow' %}
+                            {% elif ans_14 == 2 %}
+                                {% set color_14='green'%}
+                            {% endif %}
+                        {% else %}
+                                {% if currentAnswers[i+14-1] == test[i+14-1] %}
+                                    {% set ans_14=1 %}
+                                    {% set color_14='green'%}
+                                {%  endif %}
+                        {% endif %}
+                    <tr>
+                        <td style="background-color: {{ color }}">{{ i }}</td>
+                        <td style="background-color: {{ color }}">{{ ans }}
+                        </td>
+                        <td style="background-color: {{ color }}">{{ currentAnswers[i-1] }}</td>
+                        <td style="background-color: {{ color }}">{{ test[i-1] }}</td>
+                        {% if i != 14 %}
+                        <td style="background-color: {{ color_14 }}">{{ i+14 }}</td>
+                        <td style="background-color: {{ color_14 }}">{{ ans_14 }}
+                        </td>
+                        <td style="background-color: {{ color_14 }}">{{ currentAnswers[i+14-1] }}</td>
+                        <td style="background-color: {{ color_14 }}">{{ test[i+14-1] }}</td>
+                        {% else %}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                    {% endif %}
                     {%  endfor %}
                     <tr>
                         <td>Сумма</td>
