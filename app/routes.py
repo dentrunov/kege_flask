@@ -24,12 +24,13 @@ def index():
 @app.route('/test/<test>')
 #@login_required
 def test(test):
-    # генерируем формы TODO перепроверить, 25 сделать не в списке
+    # генерируем формы TODO перепроверить
     answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
     answerTwoForm = [AnswerTwoForm() for i in range(1, 29)]
-    answerManyForm = [AnswerManyForm() for i in range(1, 29)]
+    answerManyForm_25 = AnswerManyForm()
     #читаем задания теста из БД
     currentTest = Tests.query.filter_by(test_id=test).first_or_404()
+    task_25_l = len(currentTest.task_25.split(';'))
     #t = 1000
     #установка времени в минутах
     t = 235*60
@@ -55,11 +56,17 @@ def test(test):
                 if i in (17,18,20,26,27):
                     answerTwoForm[i].answerField1.data, answerTwoForm[i].answerField2.data = getattr(newTest, 'task_' + str(i)).split(';')
                 elif i == 25:
-                    field_full = getattr(newTest, 'task_' + str(i)).split(';')
-                    for j in range(len(field_full)):
-                        setattr(answerManyForm[i], 'answerField'+str(j)+'.data', field_full[j])
+                    #TODO доделать подбор ячеек по количеству ответов
+                    field_full = newTest.task_25.split(';')
+                    print(field_full)
+                    task_25_len = len(field_full)
+                    for j in range(task_25_len):
+                        setattr(answerManyForm_25, 'answerField' + str(j) + '.data', field_full[j])
+                    else:
+                        task_25_len = 0
                 else:
                     answerSimpleForm[i].answerField.data = getattr(newTest, 'task_'+str(i))
+
 
     #создаем рендер страницы
     testName = currentTest.test_name
@@ -77,7 +84,7 @@ def test(test):
     #генерируем рендер
     return render_template('test.html', title='Эмулятор КЕГЭ по информатике',
                            answerSimpleForm=answerSimpleForm, answerTwoForm=answerTwoForm,
-                           answerManyForm=answerManyForm, test=testName, test_tasks=test_tasks, test_path=test_path, time_left=time_left)
+                           answerManyForm=answerManyForm_25, test=testName, test_tasks=test_tasks, task_25_len=task_25_l, test_path=test_path, time_left=time_left)
 
 
 @app.route('/taskcheck', methods=['POST'])
@@ -130,8 +137,8 @@ def showresult(try_id):
                 if curTest[i] != None and currentAnswers[i] != None:
                     curT = curTest[i].split(';')
                     curA = currentAnswers[i].split(';')
-                    for i in range(2):
-                        summ += curT[i] == curA[i]
+                    for j in range(2):
+                        summ += curT[j] == curA[j]
             else:
                 summ += curTest[i] == currentAnswers[i]
         #разбалловка первичного балла и запись в БД

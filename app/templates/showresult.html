@@ -1,4 +1,4 @@
-{% extends"template.html" %}
+{% extends "template.html" %}
 
 {% block scripts %}
 {% endblock %}
@@ -28,9 +28,9 @@
                             {% set color='green'%}
                         {%  endif %}
 
-                        {% if ((i + 14) == 26 or (i + 14) == 27) %}
-                            {% set c1 = currentAnswers[i+14-1].split(';')  %}
-                            {% set c2 = test[i+14-1].split(';')  %}
+                        {% if ((i + 14) == 26 or (i + 14) == 27) and currentAnswers[i + 14-1] != None %}
+                            {% set c1 = currentAnswers[i + 14-1].split(';')  %}
+                            {% set c2 = test[i + 14-1].split(';')  %}
 
                             {% if c1[0] == c2[0] and c1[1] == c2[1] %}
                                 {% set ans_14 =  2%}
@@ -45,7 +45,7 @@
                                 {% set color_14='green'%}
                             {% endif %}
                         {% else %}
-                                {% if currentAnswers[i+14-1] == test[i+14-1] %}
+                                {% if currentAnswers[i + 14-1] == test[i + 14-1] %}
                                     {% set ans_14=1 %}
                                     {% set color_14='green'%}
                                 {%  endif %}
@@ -57,11 +57,11 @@
                         <td style="background-color: {{ color }}">{{ currentAnswers[i-1] }}</td>
                         <td style="background-color: {{ color }}">{{ test[i-1] }}</td>
                         {% if i != 14 %}
-                        <td style="background-color: {{ color_14 }}">{{ i+14 }}</td>
+                        <td style="background-color: {{ color_14 }}">{{ i + 14 }}</td>
                         <td style="background-color: {{ color_14 }}">{{ ans_14 }}
                         </td>
-                        <td style="background-color: {{ color_14 }}">{{ currentAnswers[i+14-1] }}</td>
-                        <td style="background-color: {{ color_14 }}">{{ test[i+14-1] }}</td>
+                        <td style="background-color: {{ color_14 }}">{{ currentAnswers[i + 14-1] }}</td>
+                        <td style="background-color: {{ color_14 }}">{{ test[i + 14-1] }}</td>
                         {% else %}
                             <td></td>
                             <td></td>
