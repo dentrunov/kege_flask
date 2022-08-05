@@ -81,7 +81,7 @@ class Tests(db.Model):
 
 class Test_started(db.Model):
     try_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.ForeignKey('users.user_id'), default=1)
+    user_id = db.Column(db.ForeignKey('users.user_id'))
     test_id = db.Column(db.ForeignKey('tests.test_id'))
     time_start = db.Column(db.DateTime, index=True, default=datetime.now)
     time_left = db.Column(db.Integer, default=235*60)

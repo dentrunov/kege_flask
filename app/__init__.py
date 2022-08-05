@@ -4,6 +4,9 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+#import psycorg2
+#import pymysql
+#pymysql.install_as_MySQLdb()
 
 app = Flask(__name__, static_folder="static")
 app.config.from_object(Config)

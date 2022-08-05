@@ -36,7 +36,7 @@ def test(test):
     t = 235*60
     if not ('try' in session):
         #создаем новую записть прохождения теста
-        newTest = Test_started(user_id=current_user.user_id, test_id=test,test_name=currentTest.test_name)
+        newTest = Test_started(user_id=current_user.user_id, test_id=test,test_name=currentTest.test_name, path=currentTest.path)
         db.session.add(newTest)
         db.session.commit()
         #создаем сессию
@@ -56,7 +56,6 @@ def test(test):
                 if i in (17,18,20,26,27):
                     answerTwoForm[i].answerField1.data, answerTwoForm[i].answerField2.data = getattr(newTest, 'task_' + str(i)).split(';')
                 elif i == 25:
-                    #TODO доделать подбор ячеек по количеству ответов
                     field_full = newTest.task_25.split(';')
                     print(field_full)
                     task_25_len = len(field_full)
