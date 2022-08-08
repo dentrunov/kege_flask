@@ -4,6 +4,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_mail import Mail, Message
 #import psycorg2
 #import pymysql
 #pymysql.install_as_MySQLdb()
@@ -15,6 +16,7 @@ moment = Moment(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
+mail = Mail(app)
 login.login_view = 'login'
 
 from app import routes, models, forms, errors

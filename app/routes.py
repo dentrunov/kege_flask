@@ -3,8 +3,9 @@ import json
 
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user, login_required
+from flask_mail import Mail, Message
 from werkzeug.urls import url_parse
-from app import app, db
+from app import app, db, mail
 from app.forms import *
 from app.models import *
 
@@ -233,7 +234,7 @@ def user(username):
         admin_users_info = {'groups':groups, 'users':users}
     else:
         admin_users_info = (None,)
-    return render_template('user.html', user=user_, role=role, tests=tests, admin_users_info=admin_users_info)
+    return render_template('user.html', title=f'Личный кабинет пользователя {user_.user_}', user=user_, role=role, tests=tests, admin_users_info=admin_users_info)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -373,7 +374,7 @@ def adminpage_edit_user(username):
         form.group.default = usr.group_id
         form.process()
         form.user_.data = usr.user_
-    return render_template('adminpage_edit_user.html', title='Редактирование профиля', form=form)
+    return render_template('adminpage_edit_user.html', title='Редактирование профиля', usr=usr, form=form)
 
 
 @app.route('/newgroup', methods=['GET', 'POST'])
@@ -402,7 +403,6 @@ def showgroup(gr):
     tests = Tests.query.order_by(Tests.time_added).all()
     tests_done = Test_started().query.filter(Test_started.ended==True and Test_started.user_id in users_list).order_by(Test_started.user_id.asc()).all()
     users_list_with_tests = {usr: {test.test_id: (test.primary_mark, test.final_mark) for test in tests_done if test.user_id==usr} for usr in users_list}
-    print(users_list_with_tests)
     gr_name = group.gr_name
     return render_template('showgroup.html', title='Список группы {}'.format(gr_name), users=users, gr_name=gr_name, tests=tests, all_tests=users_list_with_tests)
 
@@ -454,6 +454,12 @@ def finishtest():
         currentTry.ended = True
         currentTry.time_end = datetime.now()
         db.session.commit()
+        msg = Message("Тестовое сообщение", recipients=[current_user.email])
+        #TODO отправляется, попоадает в спам, доделать верстку
+        msg.body = f'''
+Ваш тест завершен.
+Вы можете посмотреть его результаты по ссылке <a href="{{ url_for('showresult', try_id=currentTry.try_id) }}">его результаты по ссылке</a>'''
+        mail.send(msg)
         return json.dumps({'success': 'true', 'msg': try_})
 
     else:
