@@ -210,7 +210,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = Users(username=form.username.data, email=form.email.data)
+        user = Users(username=form.username.data, email=form.email.data, user_=form.user_.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -241,17 +241,18 @@ def user(username):
 def edit_profile():
     #изменение профиля пользователя
     form = EditProfileForm()
+    usr = Users.query.filter_by(user_id=current_user.user_id).first_or_404()
     if form.validate_on_submit():
-        current_user.user_ = form.user_.data
-        current_user.role = form.role.data
-        current_user.parent_email = form.parent_email.data
+        usr.user_ = form.user_.data
+        usr.role = form.role.data
+        #usr.parent_email = form.parent_email.data
         db.session.commit()
         flash('Данные изменены')
         return redirect(url_for('edit_profile'))
     elif request.method == 'GET':
         form.user_.data = current_user.user_
         form.role.default = current_user.role
-        form.parent_email.data = current_user.parent_email
+        #form.parent_email.data = current_user.parent_email
     return render_template('edit_profile.html', title='Редактирование профиля', form=form)
 
 
@@ -262,7 +263,26 @@ def adminpage_groups(group):
     users = Users.query.filter_by(group_id=group).order_by(Users.user_.asc()).join(Groups,
                                                                                 Groups.group_id == group).add_columns(
         Groups.group_id, Groups.gr_name, Users.username, Users.user_).all()
-    return render_template('showgroup.html', title='Список группы {}'.format(users[0].gr_name), users=users)
+    forms = [EditUserInGroupForm() for i in range(len(users))]
+    if len(users) > 0:
+        gr_name = users[0].gr_name
+    else:
+        gr_name = group #TODO доделать название группы
+    return render_template('adminpage_groups.html', title='Список группы {}'.format(gr_name), users=users, gr_name=gr_name, forms=forms)
+
+@app.route('/changegroup', methods=['POST'])
+@login_required
+def changegroup():
+    #скрипт изменения группы пользователя
+    if request.method == "POST":
+        username = request.form.get('user')
+        group = request.form.get('groups')
+        usr = Users.query.filter_by(username=username).first_or_404()
+        usr.group_id = group
+        db.session.commit()
+        return json.dumps({'success': 'true', 'msg': 'Сохранено'})
+    else:
+        return json.dumps({'success': 'false', 'msg': 'Ошибка сохранения, обратитесь к администратору'})
 
 
 @app.route('/adminpage')
@@ -375,8 +395,17 @@ def newgroup():
 @login_required
 def showgroup(gr):
     #страница просмотра списка группы (результаты тестов)
-    users = Users.query.filter_by(group_id=gr).order_by(Users.user_.asc()).join(Groups, Groups.group_id == gr).add_columns(Groups.group_id, Groups.gr_name, Users.username, Users.user_).all()
-    return render_template('showgroup.html', title='Список группы {}'.format(users[0].gr_name), users=users)
+    #users = Users.query.filter_by(group_id=gr).order_by(Users.user_.asc()).join(Groups, Groups.group_id == gr).add_columns(Groups.group_id, Groups.gr_name, Users.username, Users.user_).all()
+    users = Users.query.filter_by(group_id=gr).order_by(Users.user_.asc()).all()
+    users_list = [user.user_id for user in users]
+    group = Groups.query.filter_by(group_id=gr).first()
+    tests = Tests.query.order_by(Tests.time_added).all()
+    tests_done = Test_started().query.filter(Test_started.ended==True and Test_started.user_id in users_list).order_by(Test_started.user_id.asc()).all()
+    users_list_with_tests = {usr: {test.test_id: (test.primary_mark, test.final_mark) for test in tests_done if test.user_id==usr} for usr in users_list}
+    print(users_list_with_tests)
+    gr_name = group.gr_name
+    return render_template('showgroup.html', title='Список группы {}'.format(gr_name), users=users, gr_name=gr_name, tests=tests, all_tests=users_list_with_tests)
+
 
 @app.route('/showuser_result/<usr>')
 @login_required

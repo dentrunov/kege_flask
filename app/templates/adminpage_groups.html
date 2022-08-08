@@ -14,14 +14,25 @@
             <div class="col-6">
 
                 {% if current_user.role == 2 %}
-                    <h2>Список пользователей группы {{ usrs[0].gr_name }}</h2>
-                    <ul>
-                    {% for usr in usrs %}
-                        <li><a href="{{ url_for('adminpage_edit_user', username=usr.username) }}">{{ usr.user_ }}</a></li>
-                    {% endfor %}
-                    </ul>
+                    <h2>Список пользователей группы {{ gr_name }}</h2>
+                    <table id="users_table">
+                    {% set i = 0 %}
+                    {% for usr in users %}
+                        <tr id="user_tr_{{ usr.username }}">
+                            <td><a href="{{ url_for('adminpage_edit_user', username=usr.username) }}">{{ usr.user_ }}</a></td>
+                            <td>
+                                <form method="POST" class="usr" id="form_{{ usr.username }}">
+                                {{ forms[i].csrf_token() }}
+                                {{ forms[i].groups() }}{{ forms[i].user(value=usr.username) }}{{ forms[i].submit }}
 
-                     <ul>
+                                </form>
+                            </td>
+                        {% set i = i + 1 %}
+                        </tr>
+                    {% endfor %}
+                    </table>
+
+
 
                 {% else %}
                     <h1>У вас нет доступа к этой странице!</h1>

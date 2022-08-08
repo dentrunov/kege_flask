@@ -159,6 +159,19 @@ p.footer {
 #parent_email {
     display: block;
 }
+form.usr input {
+    margin: 0 20px;
+}
+#users_table {
+    height: auto;
+    border: 2px double black;
+    border-collapse: collapse;
+}
+#users_table td {
+    height: auto;
+    border: 2px double black;
+    border-collapse: collapse;
+}
 @media only screen and (min-width: 220px) and (max-width: 1000px) {
     .navbar-brand {
         font-size: 12pt;

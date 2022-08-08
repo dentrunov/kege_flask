@@ -13,6 +13,7 @@ class LoginForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
     username = StringField('Имя пользователя', validators=[DataRequired()])
+    user_ = StringField('Ваше имя (и фамилия)', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     password2 = PasswordField(
@@ -34,7 +35,7 @@ class EditProfileForm(FlaskForm):
     groups_ = Groups.query.all()
     user_ = StringField('Имя', validators=[DataRequired()])
     role = SelectField('Выберите роль', choices=[(3, 'Ученик')])
-    parent_email = StringField('Email родителя', validators=[DataRequired(), Email()])
+    parent_email = StringField('Email родителя', validators=[Email()])
     submit = SubmitField('Сохранить')
 
 
@@ -51,6 +52,11 @@ class NewGroupForm(FlaskForm):
     stud_year = SelectField('Выберите учебный год', choices=[(2022, '2022-2023'), (2023, '2023-2024')])
     submit = SubmitField('Сохранить')
 
+class EditUserInGroupForm(FlaskForm):
+    groups_ = Groups.query.all()
+    groups = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups_])
+    user = HiddenField()
+    submit = SubmitField('Сохранить')
 
 class AnswerSimpleForm(FlaskForm):
     answerField = StringField('Ответ')

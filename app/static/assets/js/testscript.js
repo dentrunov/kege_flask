@@ -99,6 +99,27 @@ $(document).ready(function() {
         event.stopImmediatePropagation();
     });
 
+
+    //функция сохранения формы
+    $(".usr").submit(function(event) {
+        event.preventDefault();
+        var form_id = $(this).closest("form").attr('id');
+        var user = form_id.split('_').slice(-1);
+
+        $.ajax({
+            url: "/changegroup",
+            type: "POST",
+            data: $('#' + form_id).serialize(),
+            success: function(result) {
+                $("#message").slideToggle(1000);
+                $("#message").html('Сохранено');
+                $("#message").slideToggle(1000);
+                $("#user_tr_"+user).css("display", "none");
+            }
+        });
+        event.stopImmediatePropagation();
+    });
+
 //функция показа/сокрытия родителя для ученика в форме настройки пользователя
     $("#role").change(function (event) {
         event.preventDefault();
