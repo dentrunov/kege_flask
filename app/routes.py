@@ -454,7 +454,7 @@ def finishtest():
         currentTry.ended = True
         currentTry.time_end = datetime.now()
         db.session.commit()
-        msg = Message("Тестовое сообщение", recipients=[current_user.email])
+        msg = Message("Тестовое сообщение", recipients=[current_user.email, current_user.parent_email])
         #TODO отправляется, попоадает в спам, доделать верстку
         msg.body = f'''
 Ваш тест завершен.
