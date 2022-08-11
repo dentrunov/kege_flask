@@ -1,5 +1,4 @@
 import os
-#import psycorg2
 from local import *
 basedir = os.path.abspath(os.path.dirname(__file__))
 

@@ -1,0 +1,5 @@
+Здравствуйте, {{ current_user.user_ }}!
+Ваш тест {{ tr.test_name}} завершен {{ tr.time_end }}.
+Вы можете посмотреть {{ url_for('showresult', try_id=tr.try_id, _external=True) }}">его результаты по ссылке
+С уважением,
+администрация сайта

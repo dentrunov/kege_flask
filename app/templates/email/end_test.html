@@ -1,0 +1,5 @@
+<h1>Здравствуйте, {{ current_user.user_ }}!</h1>
+<p>Ваш тест {{ tr.test_name}} завершен {{ tr.time_end }}.</p>
+<p>Вы можете посмотреть <a href="{{ url_for('showresult', try_id=tr.try_id, _external=True) }}">его результаты по ссылке</a></p>
+<p>С уважением, <br>
+    администрация сайта</p>

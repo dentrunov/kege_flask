@@ -3,11 +3,12 @@ import json
 
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user, login_required
-from flask_mail import Mail, Message
 from werkzeug.urls import url_parse
 from app import app, db, mail
 from app.forms import *
 from app.models import *
+from app.email import *
+
 
 
 def marking(x):
@@ -15,6 +16,7 @@ def marking(x):
     marks = (0, 4, 14, 20, 27, 34, 40, 43, 45, 48, 50, 53, 55, 58, 60, 63, 65, 68, 70, 73, 75, 78, 80, 83, 85, 88, 90, 93, 95, 100)
     mark = {i: m for i, m in enumerate(marks)}
     return mark[x]
+
 
 @app.route('/')
 @app.route('/index')
@@ -454,12 +456,16 @@ def finishtest():
         currentTry.ended = True
         currentTry.time_end = datetime.now()
         db.session.commit()
-        msg = Message("Тестовое сообщение", recipients=[current_user.email, current_user.parent_email])
+        currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
+        msg = Message("Тестовое сообщение", recipients=[current_user.email])
+        subject = f'Тест {currentTry.test_name} завершен'
+        recipients = [current_user.email]
+        if current_user.parent_email is not None:
+            recipients += [current_user.parent_email]
+        text_body = render_template('email/end_test.txt', tr=currentTry)
+        html_body = render_template('email/end_test.html', tr=currentTry)
+        send_email(subject, recipients, text_body, html_body)
         #TODO отправляется, попоадает в спам, доделать верстку
-        msg.body = f'''
-Ваш тест завершен.
-Вы можете посмотреть его результаты по ссылке <a href="{{ url_for('showresult', try_id=currentTry.try_id) }}">его результаты по ссылке</a>'''
-        mail.send(msg)
         return json.dumps({'success': 'true', 'msg': try_})
 
     else:
