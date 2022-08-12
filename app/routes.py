@@ -25,9 +25,11 @@ def index():
 
 
 @app.route('/test/<test>')
-#@login_required
+@login_required
 def test(test):
-    # генерируем формы TODO перепроверить
+    #TODO если пользователь завершил тест
+
+    #генерируем формы TODO перепроверить
     answerSimpleForm = [AnswerSimpleForm() for i in range(1, 29)]
     answerTwoForm = [AnswerTwoForm() for i in range(1, 29)]
     answerManyForm_25 = AnswerManyForm()
@@ -41,6 +43,8 @@ def test(test):
         #создаем новую записть прохождения теста
         newTest = Test_started(user_id=current_user.user_id, test_id=test,test_name=currentTest.test_name, path=currentTest.path)
         db.session.add(newTest)
+        #изменяем количество решений
+        currentTest.test_starts_number = currentTest.test_starts_number + 1
         db.session.commit()
         #создаем сессию
         session['try'] = newTest.try_id
@@ -139,19 +143,27 @@ def showresult(try_id):
                 if curTest[i] != None and currentAnswers[i] != None:
                     curT = curTest[i].split(';')
                     curA = currentAnswers[i].split(';')
-                    for j in range(2):
-                        summ += curT[j] == curA[j]
+                    if len(curT) > 1:
+                        for j in range(2):
+                            summ += curT[j] == curA[j]
             else:
                 summ += curTest[i] == currentAnswers[i]
         #разбалловка первичного балла и запись в БД
         m = marking(summ)
         currentTry.primary_mark = summ
         currentTry.final_mark = m
-        db.session.commit()
 
+    if currentTest.test_avg_result == 0:
+        test_trys = Test_started.query.filter_by(test_id=test).all()
+        avg = [x.primary_mark for x in test_trys]
+        avg_mark = sum(avg) / len(avg)
+        print(avg_mark)
+        currentTest.test_avg_result = avg_mark
+        print(currentTest.test_avg_result)
     else:
         summ = currentTry.primary_mark
         m = currentTry.final_mark
+    db.session.commit()
     test_name = currentTry.test_name
     #TODO и всё-таки оптимизировать этот запрос c JOIN
     #запрос имени пользователя
@@ -358,6 +370,12 @@ def adminpage_configtest(t_id):
         form.task_Field25.data = test.task_25; form.task_Field26.data = test.task_26; form.task_Field27.data = test.task_27
     return render_template('adminpage_edit.html', title='Изменение теста', form=form)
 
+def adminpage_delete_test():
+    pass
+    # TODO сделать скрипт удаления тестов
+def adminpage_hide_test():
+    pass
+    #TODO сделать скрипт сокрытия тестов
 @app.route('/adminpage_edit_user/<username>', methods=['GET', 'POST'])
 @login_required
 def adminpage_edit_user(username):

@@ -28,13 +28,40 @@
                         <li><a href="{{ url_for('adminpage_edit_user', username=usr.username) }}">{{ usr.user_ }}</a></li>
                     {% endfor %}
                     </ul>
-                <p><a href="{{ url_for('adminpage_newtest') }}">Добавить тест</a></p>
+                    <p><a href="{{ url_for('adminpage_newtest') }}">Добавить тест</a> </p>
                     <h2>Список тестов</h2>
-                    <ul>
-                    {% for test in tests %}
-                        <li><a href="{{ url_for('adminpage_configtest', t_id=test.test_id) }}">{{ test.test_name }}</a></li>
+                    <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Номер теста</th>
+                            <th>id</th>
+                            <th>Название</th>
+                            <th>Дата добавления</th>
+                            <th>Количество прохождений</th>
+                            <th>Средний балл</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+
+
+                    </thead>
+                    <tbody>
+                    {% for i in range(tests|length) %}
+                        <tr>
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ tests[i].test_id }}</td>
+                            <td>{{ tests[i].test_name }}</td>
+                            <td>{{ tests[i].time_added.strftime('%d.%m.%Y') }}</td>
+                            <td>{{ tests[i].test_starts_number }}</td>
+                            <td>{{ tests[i].test_avg_result }}</td>
+                            <td><a href="{{ url_for('adminpage_configtest', t_id=tests[i].test_id) }}">Изменить</a></td>
+                            <td><a href="">Удалить</a></td>
+                            <td><a href="">Скрыть</a></td>
+                        </tr>
                     {% endfor %}
-                    </ul>
+                    </tbody>
+                    </table>
                     <p><a href="{{ url_for('adminpage_addvideo') }}">Добавить видео</a></p>
                 {% else %}
                     <h1>У вас нет доступа к этой странице!</h1>

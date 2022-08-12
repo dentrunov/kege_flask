@@ -9,7 +9,6 @@ from app import login, db
 class Groups(db.Model):
     group_id = db.Column(db.Integer, primary_key=True)
     gr_name = db.Column(db.String(64), index=True, unique=True)
-    #TODO Не пройдена миграция сделать обязательно
     group_owner = db.Column(db.ForeignKey('users.user_id'),default=None)
     stud_year = db.Column(db.String(64))
 
@@ -74,7 +73,9 @@ class Tests(db.Model):
     test_name = db.Column(db.String(64))
     for i in range(1, 28):
         locals()['task_'+str(i)] = db.Column(db.String(64))
-
+    test_hidden = db.Column(db.Boolean, default=True)
+    test_starts_number = db.Column(db.Integer, default=0)
+    test_avg_result = db.Column(db.Float, default=0)
     def __repr__(self):
         return '<Tests {}>'.format(self.test_name)
 
