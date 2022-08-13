@@ -1,0 +1,40 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                {% if current_user.role == 2 %}
+                    <h2>{{ title }}</h2>
+                    <form action="" method="post">
+                        {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.news_title.label }}<br>
+                        {{ form.news_title(size=64) }}
+                    </p>
+                    <p>
+                        {{ form.news_text.label }}<br>
+                        {{ form.news_text(size=64) }}
+                    </p>
+                <p>{{ form.submit() }}</p>
+                </form>
+
+
+                {% else %}
+                    <h1>У вас нет доступа к этой странице!</h1>
+                {% endif %}
+
+                </div>
+        <div class="col-2"></div>
+        </div>
+        </div>
+	</main>
+{% endblock %}

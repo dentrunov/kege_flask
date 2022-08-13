@@ -21,7 +21,8 @@ def marking(x):
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', title='Эмулятор КЕГЭ по информатике')
+    news = News_all.query.filter_by(news_show_group=0).order_by(News_all.new_date.desc()).limit(4)
+    return render_template('index.html', title='Эмулятор КЕГЭ по информатике', news=news)
 
 
 @app.route('/test/<test>')
@@ -153,6 +154,7 @@ def showresult(try_id):
         currentTry.final_mark = m
 
     if currentTest.test_avg_result == 0:
+        #вычисление среднего балла
         test_trys = Test_started.query.filter_by(test_id=test).all()
         avg = [x.primary_mark for x in test_trys]
         avg_mark = sum(avg) / len(avg)
@@ -533,3 +535,15 @@ def adminpage_addvideo():
         flash('Видео сохранено')
         return redirect(url_for('adminpage'))
     return render_template('adminpage_addvideo.html', title='Добавление видео', form=form)
+
+@app.route('/adminpage_addnews', methods=['POST', 'GET'])
+@login_required
+def adminpage_addnews():
+    form = AddNewsForm()
+    if form.validate_on_submit():
+        news = News_all(news_title=form.news_title.data, news_text=form.news_text.data)
+        db.session.add(news)
+        db.session.commit()
+        flash('Новость сохранена')
+        return redirect(url_for('adminpage'))
+    return render_template('adminpage_addnews.html', title='Добавление видео', form=form)

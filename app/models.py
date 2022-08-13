@@ -113,3 +113,17 @@ class Videos(db.Model):
 @login.user_loader
 def load_user(user_id):
     return Users.query.get(int(user_id))
+
+
+class News_all(db.Model):
+    #таблица новостей
+    news_id = db.Column(db.Integer, primary_key=True)
+    news_user_id = db.Column(db.ForeignKey('users.user_id'), default=1)
+    news_title = db.Column(db.String(64))
+    news_text = db.Column(db.String(512))
+    new_date = db.Column(db.DateTime, index=True, default=datetime.now)
+    news_show_group = db.Column(db.Integer, default=0)
+
+    def __repr__(self):
+        return '<News {}>'.format(self.v_name)
+

@@ -24,8 +24,29 @@
                     <p><a href="{{ url_for('test_list') }}">Перейти к выбору и просмотру тестов</a></p>
 
                 {% endif %}
+
             </div>
             <div class="col-2"></div>
         </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <h2>Новости</h2>
+        </div>
+        <div class="col-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-2"></div>
+
+            {% for new in news %}
+            <div class="col-2">
+                <h3>{{ new.news_title }}</h3>
+                <p>{{ new.news_text }}</p>
+                <p>{{ new.new_date.strftime('%d.%m.%Y') }}</p>
+            </div>
+            {% endfor %}
+
+        <div class="col-2"></div>
+    </div>
 	</main>
 {% endblock %}

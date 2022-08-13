@@ -99,3 +99,9 @@ class AddVideoForm(FlaskForm):
     video_name = StringField('Название видео')
     video_text = TextAreaField('Описание видео')
     submit = SubmitField('Сохранить')
+
+class AddNewsForm(FlaskForm):
+    news_title = TextAreaField('Название новости')
+    news_text = TextAreaField('Текст новости')
+    #TODO доделать выбор группы для новости
+    submit = SubmitField('Сохранить')
