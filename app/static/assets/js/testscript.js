@@ -120,6 +120,49 @@ $(document).ready(function() {
         event.stopImmediatePropagation();
     });
 
+    $(".delete_link").on('click',function (event) {
+    event.preventDefault();
+    var t_id = $(this).parent().siblings('.change_id').text();
+    var del_ = confirm('Вы хотите удалить тест?');
+         if (del_) {
+              $.ajax({
+                    url: "/adminpage_delete_test",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({'t_id': t_id}),
+                        success: function(result) {
+                            $("#tr_"+t_id).css('display','none');
+                         }
+                    });
+         };
+        event.stopImmediatePropagation();
+    });
+
+    $(".change_link").on('click',function (event) {
+    event.preventDefault();
+    var t_id = $(this).parent().siblings('.change_id').text();
+    if ($(this).text() == 'Показать') {
+        var txt = 'Скрыть';
+    }
+    else {
+        var txt = 'Показать'
+    };
+    var del_ = confirm('Вы хотите изменить видимость теста?');
+         if (del_) {
+              $.ajax({
+                    url: "/adminpage_hide_test",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({'t_id': t_id}),
+                        success: function(result) {
+                            $("#a_"+t_id).text(txt);
+                         }
+                    });
+         };
+        event.stopImmediatePropagation();
+    });
+
+
 //функция показа/сокрытия родителя для ученика в форме настройки пользователя
     $("#role").change(function (event) {
         event.preventDefault();

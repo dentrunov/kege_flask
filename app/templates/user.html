@@ -48,12 +48,44 @@
                 {% endfor %}
                 </ul>
                 <h3>Тесты</h3>
-                    <ul class="course_list">
-                    {% for test in tests %}
-                        <li><a href="{{ url_for('showtest_allusers', test=test.test_id) }}">{{ test.test_name }}</a> ({{ test.time_added.strftime('%d.%m.%Y') }})  <a href="{{ url_for('adminpage_configtest', t_id=test.test_id) }}">изменить тест</a></li>
+
+                    <p><a href="{{ url_for('adminpage_newtest') }}">Добавить тест</a> </p>
+                    <h2>Список тестов</h2>
+                    <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Номер теста</th>
+                            <th>id</th>
+                            <th>Название</th>
+                            <th>Дата добавления</th>
+                            <th>Количество прохождений</th>
+                            <th>Средний балл</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in range(tests|length) %}
+                        <tr id="tr_{{ tests[i].test_id }}">
+                            <td>{{ i + 1 }}</td>
+                            <td class="change_id">{{ tests[i].test_id }}</td>
+                            <td>{{ tests[i].test_name }}</td>
+                            <td>{{ tests[i].time_added.strftime('%d.%m.%Y') }}</td>
+                            <td>{{ tests[i].test_starts_number }}</td>
+                            <td>{{ tests[i].test_avg_result }}</td>
+                            <td><a href="{{ url_for('adminpage_configtest', t_id=tests[i].test_id) }}">Изменить</a></td>
+                            <td><a href="#" class="delete_link">Удалить</a></td>
+                            <td>
+                                {% if tests[i].test_hidden %}
+                                    <a id="a_{{ tests[i].test_id }}" href="#" class="change_link">Скрыть</a>
+                                {% else %}
+                                    <a id="a_{{ tests[i].test_id }}" href="#" class="change_link">Показать</a>
+                                {% endif %}</td>
+                        </tr>
                     {% endfor %}
-                    <p><a href="{{ url_for('adminpage_newtest') }}">Добавить тест</a></p>
-                    </ul>
+                    </tbody>
+                    </table>
                 {%  else %}
                 <a href="{{ url_for('test_list') }}">Просмотр тестов</a>
             {% endif %}

@@ -48,16 +48,21 @@
                     </thead>
                     <tbody>
                     {% for i in range(tests|length) %}
-                        <tr>
+                        <tr id="tr_{{ tests[i].test_id }}">
                             <td>{{ i + 1 }}</td>
-                            <td>{{ tests[i].test_id }}</td>
+                            <td class="change_id">{{ tests[i].test_id }}</td>
                             <td>{{ tests[i].test_name }}</td>
                             <td>{{ tests[i].time_added.strftime('%d.%m.%Y') }}</td>
                             <td>{{ tests[i].test_starts_number }}</td>
                             <td>{{ tests[i].test_avg_result }}</td>
                             <td><a href="{{ url_for('adminpage_configtest', t_id=tests[i].test_id) }}">Изменить</a></td>
-                            <td><a href="">Удалить</a></td>
-                            <td><a href="">Скрыть</a></td>
+                            <td><a href="#" class="delete_link">Удалить</a></td>
+                            <td>
+                                {% if tests[i].test_hidden %}
+                                    <a id="a_{{ tests[i].test_id }}" href="#" class="change_link">Скрыть</a>
+                                {% else %}
+                                    <a id="a_{{ tests[i].test_id }}" href="#" class="change_link">Показать</a>
+                                {% endif %}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

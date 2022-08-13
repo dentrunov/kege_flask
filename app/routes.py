@@ -64,7 +64,6 @@ def test(test):
                     answerTwoForm[i].answerField1.data, answerTwoForm[i].answerField2.data = getattr(newTest, 'task_' + str(i)).split(';')
                 elif i == 25:
                     field_full = newTest.task_25.split(';')
-                    print(field_full)
                     task_25_len = len(field_full)
                     for j in range(task_25_len):
                         setattr(answerManyForm_25, 'answerField' + str(j) + '.data', field_full[j])
@@ -157,9 +156,7 @@ def showresult(try_id):
         test_trys = Test_started.query.filter_by(test_id=test).all()
         avg = [x.primary_mark for x in test_trys]
         avg_mark = sum(avg) / len(avg)
-        print(avg_mark)
         currentTest.test_avg_result = avg_mark
-        print(currentTest.test_avg_result)
     else:
         summ = currentTry.primary_mark
         m = currentTry.final_mark
@@ -177,7 +174,13 @@ def showresult(try_id):
 @login_required
 def test_list():
     #просмотр тестов
-    tests = Tests.query.order_by(Tests.time_added.desc()).limit(10)
+    tests = Tests.query.filter_by(test_hidden=True).order_by(Tests.time_added.desc()).limit(10)
+    x = 0
+    #TODO переделать, какая-то фигня
+    for t in tests:
+        x += 1
+    if x == 0:
+        tests = None
     test_not_done = Test_started.query.filter_by(user_id=current_user.user_id, time_end=None).order_by(Test_started.time_start.desc())
     tests_done = Test_started.query.filter(Test_started.user_id == current_user.user_id, Test_started.time_end != None).order_by(Test_started.time_start.desc())
     return render_template('test_list.html', title='Выбор варианта КЕГЭ по информатике',
@@ -299,7 +302,6 @@ def changegroup():
     else:
         return json.dumps({'success': 'false', 'msg': 'Ошибка сохранения, обратитесь к администратору'})
 
-
 @app.route('/adminpage')
 @login_required
 def adminpage():
@@ -308,7 +310,6 @@ def adminpage():
     groups = Groups.query.order_by(Groups.gr_name.asc()).all()
     tests = Tests.query.order_by(Tests.time_added.desc()).all()
     return render_template('adminpage.html', title='Администрирование сайта', usrs=usrs, groups=groups, tests=tests)
-
 
 
 @app.route('/adminpage_newtest', methods=['GET', 'POST'])
@@ -370,12 +371,37 @@ def adminpage_configtest(t_id):
         form.task_Field25.data = test.task_25; form.task_Field26.data = test.task_26; form.task_Field27.data = test.task_27
     return render_template('adminpage_edit.html', title='Изменение теста', form=form)
 
+
+@app.route('/adminpage_delete_test', methods=['POST'])
+@login_required
 def adminpage_delete_test():
-    pass
-    # TODO сделать скрипт удаления тестов
+    #скрипт удаления тестов
+    if request.method == 'POST':
+        #TODO доделать алерт красиво
+        t_id = request.json['t_id']
+        test = Tests.query.filter_by(test_id=t_id).delete()
+        db.session.commit()
+        return json.dumps({'success': 'true', 'msg': 'Сохранено'})
+    else:
+        return json.dumps({'success': 'false', 'msg': 'Ошибка сохранения, обратитесь к администратору'})
+
+
+
+@app.route('/adminpage_hide_test', methods=['POST'])
+@login_required
 def adminpage_hide_test():
-    pass
-    #TODO сделать скрипт сокрытия тестов
+    # скрипт сокрытия/показа тестов
+    if request.method == 'POST':
+        #TODO доделать алерт красиво
+        t_id = request.json['t_id']
+        test = Tests.query.filter_by(test_id=t_id).first_or_404()
+        test.test_hidden = not(test.test_hidden)
+        db.session.commit()
+        return json.dumps({'success': 'true', 'msg': 'Сохранено'})
+    else:
+        return json.dumps({'success': 'false', 'msg': 'Ошибка сохранения, обратитесь к администратору'})
+
+
 @app.route('/adminpage_edit_user/<username>', methods=['GET', 'POST'])
 @login_required
 def adminpage_edit_user(username):
@@ -475,7 +501,7 @@ def finishtest():
         currentTry.time_end = datetime.now()
         db.session.commit()
         currentTry = Test_started.query.filter_by(try_id=try_).first_or_404()
-        msg = Message("Тестовое сообщение", recipients=[current_user.email])
+        #msg = Message("Тестовое сообщение", recipients=[current_user.email])
         subject = f'Тест {currentTry.test_name} завершен'
         recipients = [current_user.email]
         if current_user.parent_email is not None:
