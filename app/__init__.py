@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_simple_captcha import CAPTCHA
 #import psycorg2
 #import pymysql
 #pymysql.install_as_MySQLdb()
@@ -18,6 +19,9 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 mail = Mail(app)
 login.login_view = 'login'
+
+CAPTCHA = CAPTCHA(config=Config.CAPTCHA_CONFIG)
+app = CAPTCHA.init_app(app)
 
 from app import routes, models, forms, errors, email
 

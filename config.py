@@ -18,3 +18,4 @@ class Config(object):
     MAIL_DEFAULT_SENDER = mail_default_sender
     MAIL_PASSWORD = mail_password
     MAIL_USE_SSL = mail_use_ssl
+    CAPTCHA_CONFIG = captcha_conf

@@ -4,7 +4,8 @@ import json
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from app import app, db, mail
+
+from app import app, db, mail, CAPTCHA
 from app.forms import *
 from app.models import *
 from app.email import *
@@ -222,6 +223,22 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+'''@app.route('/register', methods=['GET', 'POST'])
+#функция регистрации
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        c_hash = request.form.get('captcha-hash')
+        c_text = request.form.get('captcha-text')
+        user = Users(username=form.username.data, email=form.email.data, user_=form.user_.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Поздравляем, вы зарегистрированы!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Регистрация', form=form)'''
 
 @app.route('/register', methods=['GET', 'POST'])
 #функция регистрации
@@ -229,14 +246,20 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
+    captcha = CAPTCHA.create()
     if form.validate_on_submit():
-        user = Users(username=form.username.data, email=form.email.data, user_=form.user_.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Поздравляем, вы зарегистрированы!')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Регистрация', form=form)
+        c_hash = request.form.get('captcha-hash')
+        c_text = request.form.get('captcha-text')
+        if CAPTCHA.verify(c_text, c_hash):
+            user = Users(username=form.username.data, email=form.email.data, user_=form.user_.data)
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Поздравляем, вы зарегистрированы!')
+            return redirect(url_for('login'))
+        else:
+            flash('Поздравляем, вы зарегистрированы!')
+    return render_template('register.html', title='Регистрация', form=form, captcha=captcha)
 
 
 @app.route('/user/<username>')

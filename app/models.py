@@ -3,6 +3,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from local import admin_id
 
 from app import login, db
 
@@ -67,7 +68,7 @@ class Users(UserMixin, db.Model):
 
 class Tests(db.Model):
     test_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.ForeignKey('users.user_id'), default=1)
+    user_id = db.Column(db.ForeignKey('users.user_id'), default=admin_id)
     time_added = db.Column(db.DateTime, index=True, default=datetime.now)
     path = db.Column(db.String(64))
     test_name = db.Column(db.String(64))
@@ -101,7 +102,7 @@ class Test_started(db.Model):
 
 class Videos(db.Model):
     v_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.ForeignKey('users.user_id'), default=1)
+    user_id = db.Column(db.ForeignKey('users.user_id'), default=admin_id)
     v_link = db.Column(db.String(64)) #Ссылка на ролик
     v_name = db.Column(db.String(64))
     v_text = db.Column(db.String(128)) #описание видео

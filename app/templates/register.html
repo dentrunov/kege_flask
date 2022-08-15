@@ -50,6 +50,7 @@
                             <span style="color: red;">[{{ error }}]</span>
                             {% endfor %}
                         </p>
+                        <p>{{ (captcha_html(captcha)) | safe }}</p>
                         <p>{{ form.submit() }}</p>
                     </form>
                 </div>
