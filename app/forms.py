@@ -38,6 +38,17 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Такой адрес электронной почты уже существует')
 
 
+class forgerPwdForm(FlaskForm):
+    text = StringField('Имя пользователя или почта', validators=[DataRequired()])
+    submit = SubmitField('Отправить')
+
+
+class newPassForm(FlaskForm):
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Подтверждение пароля', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Сохранить')
+
 class EditProfileForm(FlaskForm):
     groups_ = Groups.query.all()
     user_ = StringField('Имя', validators=[DataRequired()])

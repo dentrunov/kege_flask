@@ -65,6 +65,14 @@ class Users(UserMixin, db.Model):
         return '<User {}>'.format(self.username)
 
 
+class RestorePwd(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.ForeignKey('users.user_id'))
+    time_added = db.Column(db.DateTime, index=True, default=datetime.now)
+    hash = db.Column(db.String(64))
+    def __repr__(self):
+        return '<RestorePwd {}>'.format(self.id)
+
 
 class Tests(db.Model):
     test_id = db.Column(db.Integer, primary_key=True)
@@ -100,6 +108,7 @@ class Test_started(db.Model):
     def __repr__(self):
         return '<Tests_started {}>'.format(self.test_name)
 
+
 class Videos(db.Model):
     v_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.ForeignKey('users.user_id'), default=admin_id)
@@ -111,10 +120,10 @@ class Videos(db.Model):
     def __repr__(self):
         return '<Videos {}>'.format(self.v_name)
 
+
 @login.user_loader
 def load_user(user_id):
     return Users.query.get(int(user_id))
-
 
 class News_all(db.Model):
     #таблица новостей

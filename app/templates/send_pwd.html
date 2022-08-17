@@ -1,0 +1,39 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <h1>Восстановление пароля</h1>
+                <p>Создайте новый пароль и запомните его!</p>
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.password.label }}<br>
+                        {{ form.password(size=32) }}<br>
+                        {% for error in form.password.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                    </p>
+                    <p>
+                        {{ form.password2.label }}<br>
+                        {{ form.password2(size=32) }}<br>
+                        {% for error in form.password2.errors %}
+                        <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                    </p>
+                <p>{{ form.submit() }}</p>
+                </form>
+            </div>
+            <div class="col-3"></div>
+        </div>
+	</main>
+{% endblock %}

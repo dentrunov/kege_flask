@@ -1,9 +1,12 @@
+import string
+from random import choice
 from datetime import datetime, time
 import json
 
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
+from sqlalchemy import or_
 
 from app import app, db, mail, CAPTCHA
 from app.forms import *
@@ -18,6 +21,8 @@ def marking(x):
     mark = {i: m for i, m in enumerate(marks)}
     return mark[x]
 
+def create_hash():
+    return ''.join([choice(list(string.ascii_letters+string.digits)) for i in range(40)])
 
 @app.route('/')
 @app.route('/index')
@@ -223,22 +228,50 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-'''@app.route('/register', methods=['GET', 'POST'])
-#функция регистрации
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = RegistrationForm()
+@app.route('/forget_pwd', methods=['GET', 'POST'])
+def forget_pwd():
+    #форма отправки запроса восстановление пароля
+    form = forgerPwdForm()
     if form.validate_on_submit():
-        c_hash = request.form.get('captcha-hash')
-        c_text = request.form.get('captcha-text')
-        user = Users(username=form.username.data, email=form.email.data, user_=form.user_.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
+        search = form.text.data
+        usr = Users.query.filter(or_(Users.username==search, Users.email==search)).first()
+        if usr:
+            #создание записи БД о запросе сброса пароля
+            hsh = create_hash()
+            rp = RestorePwd(user_id=usr.user_id, hash=hsh)
+            db.session.add(rp)
+            db.session.commit()
+            #создание сообщения
+            email_ = usr.email.split('@')
+            em = email_[0][:2] + '*' * (len(email_[0]) - 2) + '@' + '*' * (len(email_[1]) - 4) + email_[1][-4:]
+            #отправка письма
+            subject = f'Сброс пароля на сайте {request.host}'
+            recipients = [usr.email]
+            text_body = render_template('email/forget_pwd_email.txt', email=usr.email, hsh=hsh)
+            html_body = render_template('email/forget_pwd_email.html', email=usr.email, hsh=hsh)
+            send_email(subject, recipients, text_body, html_body)
+            flash(f'На электронную почту {em}, указанную в учетной записи, направлено сообщение'+ subject)
+        else:
+            flash('Пользователь не найден')
+    return render_template('forget_pwd.html', title='Восстановление пароля', form=form)
+
+@app.route('/send_pwd/<hsh>', methods=['GET', 'POST'])
+def send_pwd(hsh):
+    #форма ввода нового пароля
+    form = newPassForm()
+    if form.validate_on_submit():
+        hash_check = RestorePwd.query.filter_by(hash=hsh).first_or_404()
+        usr = Users.query.filter_by(user_id=hash_check.user_id).first()
+        usr.set_password(form.password.data)
+        RestorePwd.query.filter_by(hash=hsh).delete()
         db.session.commit()
-        flash('Поздравляем, вы зарегистрированы!')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Регистрация', form=form)'''
+        return redirect('/login')
+    if request.method == 'GET':
+        hash_check = RestorePwd.query.filter_by(hash=hsh).first_or_404()
+        if hash_check:
+            return render_template('send_pwd.html', title='Восстановление пароля', form=form)
+    return redirect('/')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 #функция регистрации
