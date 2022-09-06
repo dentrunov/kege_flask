@@ -288,6 +288,12 @@ def register():
             user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
+            # отправка письма
+            subject = f'Вы зарегистрированы на сайте {request.host}'
+            recipients = [form.email.data]
+            text_body = render_template('email/register_email.txt', username=form.user_.data)
+            html_body = render_template('email/register_email.html', username=form.user_.data)
+            send_email(subject, recipients, text_body, html_body)
             flash('Поздравляем, вы зарегистрированы!')
             return redirect(url_for('login'))
         else:
