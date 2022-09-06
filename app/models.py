@@ -138,7 +138,6 @@ class News_all(db.Model):
         return '<News {}>'.format(self.v_name)
 
 
-
 class Homeworks(db.Model):
     #домашние задания
     hw_id = db.Column(db.Integer, primary_key=True)
@@ -151,20 +150,25 @@ class Homeworks(db.Model):
     for i in range(1, 28):
         locals()['task_'+str(i)] = db.Column(db.ForeignKey('hw_tasks.task_id'), index=True)
     hw_stat_percentage = db.Column(db.Integer, default=0)
+
     def __repr__(self):
         return '<Homework {}>'.format(self.v_name)
-class Homeworks_for_users(db.Model):
+
+
+class HW_for_users(db.Model):
     #связь домашних заданий и пользователей
     hfu_id = db.Column(db.Integer, primary_key=True)
     hfu_user_id = db.Column(db.ForeignKey('users.user_id'))
     hfu_hw_id = db.Column(db.ForeignKey('homeworks.hw_id'))
 
-class hw_tasks(db.Model):
+
+class HW_tasks(db.Model):
     #отдельные задания для ДЗ
     task_id = db.Column(db.Integer, primary_key=True)
     task_text = db.Column(db.String(512), index=True)
     task_answer = db.Column(db.String(32))
     task_stat_true = db.Column(db.Integer, default=0)
     task_stat_false = db.Column(db.Integer, default=0)
+
     def __repr__(self):
         return '<Homework_tasks {}>'.format(self.v_name)

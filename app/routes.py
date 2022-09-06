@@ -609,3 +609,15 @@ def adminpage_addnews():
         flash('Новость сохранена')
         return redirect(url_for('adminpage'))
     return render_template('adminpage_addnews.html', title='Добавление видео', form=form)
+
+@app.route('/adminpage_addtask', methods=['POST', 'GET'])
+@login_required
+def adminpage_addtask():
+    #создание отдельных заданий
+    pass
+
+@app.route('/adminpage_homework', methods=['POST', 'GET'])
+@login_required
+def adminpage_addhomework():
+    #создание домашнего задания
+    pass
