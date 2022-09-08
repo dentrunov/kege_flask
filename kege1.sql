@@ -3,7 +3,7 @@ START TRANSACTION;
 CREATE TABLE groups (
   group_id SERIAL PRIMARY KEY,
   gr_name varchar(20) NOT NULL,
-  group_owner int,
+  group_owner int NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
   stud_year varchar(20) NOT NULL
 );
 
@@ -15,7 +15,7 @@ CREATE TABLE parents (
 
 CREATE TABLE tests (
   test_id SERIAL PRIMARY KEY,
-  user_id int NOT NULL,
+  user_id int NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
   time_added timestamp NOT NULL,
   path varchar(20) NOT NULL,
   test_name varchar(40) NOT NULL,
@@ -45,13 +45,16 @@ CREATE TABLE tests (
   task_24 int NOT NULL,
   task_25 varchar(50) NOT NULL,
   task_26 varchar(200) NOT NULL,
-  task_27 varchar(20) NOT NULL
+  task_27 varchar(20) NOT NULL,
+  test_hidden BOOLEAN DEFAULT True,
+  test_starts_number INT DEFAULT 0,
+  test_avg_result INT DEFAULT 0
 );
 
 CREATE TABLE test_started (
   try_id SERIAL PRIMARY KEY,
-  user_id int NOT NULL,
-  test_id int NOT NULL,
+  user_id int NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
+  test_id int NOT NULL REFERENCES test (test_id) ON DELETE CASCADE,
   time_start timestamp NOT NULL,
   time_left int NOT NULL,
   time_end timestamp,
@@ -78,13 +81,13 @@ CREATE TABLE test_started (
   task_18 varchar(11),
   task_19 int,
   task_20 varchar(11),
-  task_21 int,
+  task_21 varchar(11),
   task_22 int,
   task_23 int,
   task_24 int,
   task_25 varchar(50),
   task_26 varchar(200),
-  task_27 varchar(20),
+  task_27 varchar(50),
   primary_mark int,
   final_mark int
 );
@@ -94,7 +97,7 @@ CREATE TABLE users (
   username text NOT NULL,
   email text NOT NULL,
   role int NOT NULL,
-  group_id int NOT NULL,
+  group_id int NOT NULL DEFAULT 1 REFERENCES groups ON DELETE SET DEFAULT,
   reg_time timestamp NOT NULL,
   last_visit_time timestamp NOT NULL,
   user_ varchar(64),
@@ -104,13 +107,26 @@ CREATE TABLE users (
 
 CREATE TABLE videos (
   v_id SERIAL PRIMARY KEY,
-  user_id int NOT NULL,
+  user_id int NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
   v_link text,
   v_name text,
   v_text text,
   v_date timestamp
 );
 
+CREATE TABLE news_all (
+  news_id SERIAL PRIMARY KEY,
+  news_user_id int NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
+  news_title text,
+  news_text text,
+  new_date timestamp, news_show_group int
+);
+
+CREATE TABLE restore_pwd (
+id SERIAL PRIMARY KEY,
+user_id integer NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
+time_added timestamp,
+hash text);
 
 
 COMMIT;
