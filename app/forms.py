@@ -123,3 +123,11 @@ class AddNewsForm(FlaskForm):
     news_text = TextAreaField('Текст новости')
     #TODO доделать выбор группы для новости
     submit = SubmitField('Сохранить')
+
+
+class AddHWTaskForm(FlaskForm):
+    HW_task_title = StringField('Название ДЗ')
+    HW_task_text = TextAreaField('Содержание задания')
+    HW_task_answer = StringField('Ответ')
+    submit = SubmitField('Сохранить')
+

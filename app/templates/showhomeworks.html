@@ -1,0 +1,27 @@
+{% extends"template.html" %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-3">
+                <h1>{{ title }}</h1>
+            <ul class="course_list">
+                {% for hw in homeworks %}
+                <li>{{ hw.hw_title }} {{ hw.hw_test_date }} {{ hw.hw_users_ended }}</li>
+                {% endfor %}
+            </ul>
+            </div>
+            <div class="col-3"></div>
+            <div class="col-3"></div>
+            </div>
+        </div>
+	</main>
+{% endblock %}

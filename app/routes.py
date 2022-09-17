@@ -6,7 +6,7 @@ import json
 from flask import render_template, flash, redirect, url_for, request, session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from sqlalchemy import or_
+#from sqlalchemy import or_
 
 from app import app, db, mail, CAPTCHA
 from app.forms import *
@@ -234,7 +234,7 @@ def forget_pwd():
     form = forgerPwdForm()
     if form.validate_on_submit():
         search = form.text.data
-        usr = Users.query.filter(or_(Users.username==search, Users.email==search)).first()
+        usr = Users.query.filter((Users.username == search) | (Users.email == search)).first()
         if usr:
             #создание записи БД о запросе сброса пароля
             hsh = create_hash()
@@ -610,14 +610,41 @@ def adminpage_addnews():
         return redirect(url_for('adminpage'))
     return render_template('adminpage_addnews.html', title='Добавление видео', form=form)
 
-@app.route('/adminpage_addtask', methods=['POST', 'GET'])
+@app.route('/homeworks_show', methods=['POST', 'GET'])
 @login_required
-def adminpage_addtask():
-    #создание отдельных заданий
-    pass
+def homeworks_show():
+    #просмотр домашних заданий TODO сделать выборку по пользователю для ученика
+    homeworks = Homeworks.query().filter_by(hw_user_id=current_user.user_id).order_by(Homeworks.hw_test_date.desc).limit(10)
+    return render_template('showhomeworks.html', title='Домашние задания', homeworks=homeworks)
 
-@app.route('/adminpage_homework', methods=['POST', 'GET'])
+
+@app.route('/hometasks_show/<task>')
 @login_required
-def adminpage_addhomework():
+def hometasks_show(task):
+    # просмотр всех отдельных заданий
+    if task == 'all':
+        #TODO потом сделать выбор предмета
+        themes = Themes.query().filter_by(theme_subject=1).order_by(Themes.theme_number.asc).all_or_404()
+        t_name = 'информатике'
+        return render_template('showhometasks.html', title='Задания по темам ЕГЭ по '+ t_name, themes=themes)
+    else:
+        tasks = HW_tasks.query().filter_by(task_number=task).order_by(HW_tasks.task_id.desc).all_or_404()
+        return render_template('showtask.html', title='Задания по теме' + str(task), tasks=tasks)
+
+
+@app.route('/homeworks_addtask', methods=['POST', 'GET'])
+@login_required
+def homeworks_addtask():
+    form = AddHWTaskForm()
+    if form.validate_on_submit():
+        hw_task = HW_tasks(
+            task_text=form.HW_task_text.data,
+            task_answer=form.HW_task_answer.data)
+        return redirect(url_for('adminpage'))
+    return render_template('homeworks_addtask.html', title='Добавление задания')
+
+@app.route('/homeworks_addhw', methods=['POST', 'GET'])
+@login_required
+def homeworks_addhomework():
     #создание домашнего задания
     pass

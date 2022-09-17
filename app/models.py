@@ -29,7 +29,7 @@ class Parents(db.Model):
 
 class Users(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.String(64))
+    user_ = db.Column(db.String(64))
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
@@ -138,6 +138,23 @@ class News_all(db.Model):
         return '<News {}>'.format(self.v_name)
 
 
+class Subjects(db.Model):
+    #список предметов
+    subj_id = db.Column(db.Integer, primary_key=True)
+    subj_name = db.Column(db.String(20), index=True)
+    def __repr__(self):
+        return '<Subject {}>'.format(self.subj_name)
+
+class Themes(db.Model):
+    #таблица тем
+    theme_id = db.Column(db.Integer, primary_key=True)
+    theme_number = db.Column(db.Integer, index=True)
+    theme_name = db.Column(db.String(64), index=True)
+    theme_subject = db.Column(db.ForeignKey('subjects.subj_name'))
+    def __repr__(self):
+        return '<Theme {}>'.format(self.theme_name)
+
+
 class Homeworks(db.Model):
     #домашние задания
     hw_id = db.Column(db.Integer, primary_key=True)
@@ -149,6 +166,7 @@ class Homeworks(db.Model):
     hw_active = db.Column(db.Boolean, default=True)
     for i in range(1, 28):
         locals()['task_'+str(i)] = db.Column(db.ForeignKey('hw_tasks.task_id'), index=True)
+    hw_users_ended = db.Column(db.Integer)
     hw_stat_percentage = db.Column(db.Integer, default=0)
 
     def __repr__(self):
@@ -166,6 +184,8 @@ class HW_tasks(db.Model):
     #отдельные задания для ДЗ
     task_id = db.Column(db.Integer, primary_key=True)
     task_text = db.Column(db.String(512), index=True)
+    task_subject = db.Column(db.ForeignKey('subjects.subj_id'))
+    task_number = db.Column(db.ForeignKey('themes.theme_id'))
     task_answer = db.Column(db.String(32))
     task_stat_true = db.Column(db.Integer, default=0)
     task_stat_false = db.Column(db.Integer, default=0)
