@@ -108,15 +108,15 @@ def taskcheck():
         task_number = request.form.get('answerNumber')
         #проверка заданий с несколькими ответами
         if int(task_number) in (17, 18, 20, 26, 27):
-            field = request.form.get('answerField1') + ';' + request.form.get('answerField2')
+            field = request.form.get('answerField1').strip() + ';' + request.form.get('answerField2').strip()
         elif int(task_number) == 25:
             field = ''
             for i in range(1, 11):
                 if request.form.get('answerField' + str(i)) is not None:
-                    field += (request.form.get('answerField' + str(i)) + ';')
+                    field += (request.form.get('answerField' + str(i)).strip() + ';')
             field = field.rstrip(';')
         else:
-            field = request.form.get('answerField')
+            field = request.form.get('answerField').strip()
         #запись ответа и времени записи ответа в БД
         answer = Test_started.query.filter_by(try_id=session['try']).first()
         setattr(answer, 'task_'+task_number, field)
