@@ -81,7 +81,7 @@ class Tests(db.Model):
     path = db.Column(db.String(64))
     test_name = db.Column(db.String(64))
     for i in range(1, 28):
-        locals()['task_'+str(i)] = db.Column(db.String(64))
+        locals()['task_'+str(i)] = db.Column(db.String(256))
     test_hidden = db.Column(db.Boolean, default=True)
     test_starts_number = db.Column(db.Integer, default=0)
     test_avg_result = db.Column(db.Float, default=0)

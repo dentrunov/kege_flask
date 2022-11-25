@@ -92,7 +92,7 @@ CREATE TABLE test_started (
   task_23 int,
   task_24 int,
   task_25 varchar(50),
-  task_26 varchar(200),
+  task_26 varchar(200 ),
   task_27 varchar(50),
   primary_mark int,
   final_mark int
