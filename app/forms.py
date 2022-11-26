@@ -5,6 +5,7 @@ from app.models import *
 
 from string import ascii_letters, digits, punctuation
 
+
 class LoginForm(FlaskForm):
     username = StringField('Имя пользователя', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired(), Length(min=8)])
