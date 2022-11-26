@@ -3,61 +3,55 @@ from datetime import datetime
 
 import psycopg2
 
-conn = psycopg2.connect(dbname=db_name, user=db_username,
-                        password=db_password, host=db_host)
+conn = psycopg2.connect(host=db_host, database=db_name, user=db_username, password=db_password)
 cursor = conn.cursor()
 
-cursor.execute('''CREATE TABLE groups (
+cursor.execute('''CREATE TABLE IF NOT EXISTS groups (
   group_id SERIAL PRIMARY KEY,
   gr_name varchar(20) NOT NULL,
   group_owner int NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
   stud_year varchar(20) NOT NULL
 );
-CREATE TABLE parents (
-  link_id SERIAL PRIMARY KEY,
-  parent_id int NOT NULL,
-  child_id int NOT NULL
-);
 
-CREATE TABLE tests (
+CREATE TABLE IF NOT EXISTS tests (
   test_id SERIAL PRIMARY KEY,
   user_id int NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
   time_added timestamp NOT NULL,
-  path varchar(20) NOT NULL,
-  test_name varchar(40) NOT NULL,
-  task_1 text NOT NULL,
-  task_2 varchar NOT NULL,
-  task_3 int NOT NULL,
-  task_4 text NOT NULL,
-  task_5 text NOT NULL,
-  task_6 int NOT NULL,
-  task_7 int NOT NULL,
-  task_8 int NOT NULL,
-  task_9 int NOT NULL,
-  task_10 int NOT NULL,
-  task_11 int NOT NULL,
-  task_12 int NOT NULL,
-  task_13 int NOT NULL,
-  task_14 int NOT NULL,
-  task_15 int NOT NULL,
-  task_16 text NOT NULL,
-  task_17 varchar(11) NOT NULL,
-  task_18 varchar(11) NOT NULL,
-  task_19 int NOT NULL,
-  task_20 varchar(11) NOT NULL,
-  task_21 varchar(11) NOT NULL,
-  task_22 int NOT NULL,
-  task_23 int NOT NULL,
-  task_24 int NOT NULL,
-  task_25 varchar(50) NOT NULL,
-  task_26 varchar(200) NOT NULL,
-  task_27 varchar(20) NOT NULL,
+  path varchar(50) NOT NULL,
+  test_name varchar(50) NOT NULL,
+  task_1 varchar(256),
+  task_2 varchar(256),
+  task_3 varchar(256),
+  task_4 varchar(256),
+  task_5 varchar(256),
+  task_6 varchar(256),
+  task_7 varchar(256),
+  task_8 varchar(256),
+  task_9 varchar(256),
+  task_10 varchar(256),
+  task_11 varchar(256),
+  task_12 varchar(256),
+  task_13 varchar(256),
+  task_14 varchar(256),
+  task_15 varchar(256),
+  task_16 varchar(256),
+  task_17 varchar(256),
+  task_18 varchar(256),
+  task_19 varchar(256),
+  task_20 varchar(256),
+  task_21 varchar(256),
+  task_22 varchar(256),
+  task_23 varchar(256),
+  task_24 varchar(256),
+  task_25 varchar(256),
+  task_26 varchar(256),
+  task_27 varchar(256),
   test_hidden BOOLEAN DEFAULT True,
   test_starts_number INT DEFAULT 0,
   test_avg_result INT DEFAULT 0
 );
 
-CREATE TABLE test_started (
+CREATE TABLE IF NOT EXISTS test_started (
   try_id SERIAL PRIMARY KEY,
   user_id int NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
   test_id int NOT NULL REFERENCES test (test_id) ON DELETE CASCADE,
@@ -67,82 +61,143 @@ CREATE TABLE test_started (
   ended boolean,
   test_name text NOT NULL,
   path varchar(64),
-  task_1 varchar(64),
-  task_2 varchar(64),
-  task_3 int,
-  task_4 int,
-  task_5 int,
-  task_6 int,
-  task_7 int,
-  task_8 int,
-  task_9 int,
-  task_10 int,
-  task_11 int,
-  task_12 int,
-  task_13 int,
-  task_14 int,
-  task_15 int,
-  task_16 text,
-  task_17 varchar(11),
-  task_18 varchar(11),
-  task_19 int,
-  task_20 varchar(11),
-  task_21 varchar(11),
-  task_22 int,
-  task_23 int,
-  task_24 int,
-  task_25 varchar(50),
-  task_26 varchar(200 ),
-  task_27 varchar(50),
+  task_1 varchar(256),
+  task_2 varchar(256),
+  task_3 varchar(256),
+  task_4 varchar(256),
+  task_5 varchar(256),
+  task_6 varchar(256),
+  task_7 varchar(256),
+  task_8 varchar(256),
+  task_9 varchar(256),
+  task_10 varchar(256),
+  task_11 varchar(256),
+  task_12 varchar(256),
+  task_13 varchar(256),
+  task_14 varchar(256),
+  task_15 varchar(256),
+  task_16 varchar(256),
+  task_17 varchar(256),
+  task_18 varchar(256),
+  task_19 varchar(256),
+  task_20 varchar(256),
+  task_21 varchar(256),
+  task_22 varchar(256),
+  task_23 varchar(256),
+  task_24 varchar(256),
+  task_25 varchar(256),
+  task_26 varchar(256),
+  task_27 varchar(256),
   primary_mark int,
   final_mark int
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
   username text NOT NULL,
   email text NOT NULL,
-  role int NOT NULL,
-  group_id int NOT NULL DEFAULT 1 REFERENCES groups(group_id) ON DELETE SET DEFAULT,
+  role int NOT NULL DEFAULT 0,
+  group_id int DEFAULT 1 REFERENCES groups(group_id) ON DELETE SET DEFAULT,
   reg_time timestamp NOT NULL,
   last_visit_time timestamp NOT NULL,
   user_ varchar(64),
   password_hash varchar(128) NOT NULL,
-  parent_email text
+  parent_email varchar(64)
 );
 
-CREATE TABLE videos (
+CREATE TABLE IF NOT EXISTS videos (
   v_id SERIAL PRIMARY KEY,
   user_id int NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
-  v_link text,
-  v_name text,
-  v_text text,
+  v_link varchar(64),
+  v_name varchar(64),
+  v_text varchar(64),
   v_date timestamp
 );
 
-CREATE TABLE news_all (
+CREATE TABLE IF NOT EXISTS news_all (
   news_id SERIAL PRIMARY KEY,
   news_user_id int NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
-  news_title text,
-  news_text text,
+  news_title varchar(64),
+  news_text varchar(64),
   new_date timestamp, news_show_group int
 );
 
-CREATE TABLE restore_pwd (
+CREATE TABLE IF NOT EXISTS restore_pwd (
 id SERIAL PRIMARY KEY,
 user_id integer NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
 time_added timestamp,
-hash text);
+hash varchar(256));
+
+CREATE TABLE IF NOT EXISTS hw_tasks (
+task_id SERIAL PRIMARY KEY,
+task_text varchar(64),
+task_user int NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
+task_answer varchar(64),
+task_stat_true int,
+task_stat_all int,
+task_date timestamp);
+
+CREATE TABLE IF NOT EXISTS subjects (
+subj_id SERIAL PRIMARY KEY,
+subj_name varchar(64),
+);
+
+CREATE TABLE IF NOT EXISTS themes (
+theme_id SERIAL PRIMARY KEY,
+theme_number int,
+theme_name varchar(64),
+theme_subject int NOT NULL REFERENCES subjects (subj_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS homeworks (
+hw_id SERIAL PRIMARY KEY,
+hw_user_id int NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
+hw_title varchar(64) NOT NULL,
+hw_test_date timestamp NOT NULL,
+hw_start_date timestamp,
+hw_end_date timestamp,
+hw_active BOOLEAN,
+hw_task_1 int,
+hw_task_2 int,
+hw_task_3 int,
+hw_task_4 int,
+hw_task_5 int,
+hw_task_6 int,
+hw_task_7 int,
+hw_task_8 int,
+hw_task_9 int,
+hw_task_10 int,
+hw_task_11 int,
+hw_task_12 int,
+hw_task_13 int,
+hw_task_14 int,
+hw_task_15 int,
+hw_task_16 int,
+hw_task_17 int,
+hw_task_18 int,
+hw_task_19 int,
+hw_task_20 int,
+theme_number int,
+theme_name varchar(64),
+hw_users_ended int,
+);
+
+CREATE TABLE IF NOT EXISTS hw_for_users (
+hfu_hw_id int NOT NULL REFERENCES homeworks (hw_id) ON DELETE CASCADE,
+hfu_user_id int NOT NULL REFERENCES users (user_id) ON DELETE NO ACTION,
+hfu_hw_ended BOOLEAN,
+hfu_hw_mark int,
+hfu_hw_percentage int
+);
+
 ''')
+conn.commit()
+
 pwd = 'aaa'
 conn.execute('''
     INSERT INTO users (username, email, role, group_id, reg_time, last_visit_time, user_, password_hash) 
-    VALUES {}
-;'''.format('admin', 'sgema@rambler.ru', 2, datetime.now, datetime.now, 'Админ', pwd))
+    VALUES ({});''',('admin', 'sgema@rambler.ru', 2, datetime.now, datetime.now, 'Админ', pwd))
 
 conn.commit()
-
-
-
 cursor.close()
 conn.close()
