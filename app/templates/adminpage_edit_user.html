@@ -14,6 +14,7 @@
             <div class="col-6">
             {% if current_user.role == 2 %}
                 <h2>Изменить профиль пользователя {{ usr.user_ }}</h2>
+                <p>Уникальное имя пользователя - <b>{{ usr.username }}</b></p>
                 <form action="" method="post">
                     {{ form.hidden_tag() }}
                     <p>

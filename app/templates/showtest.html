@@ -29,10 +29,14 @@
                         <tr>
                             <th scope="row">{{ loop.index }}</th>
                             <td>{{ test.user_ }}</td>
-                            <td>{{ test.time_end.strftime('%d.%m.%Y') }}</td>
+                            <td>{% if test.time_end != None %}
+                                {{ test.time_end.strftime('%d.%m.%Y') }}
+                            {% else %}
+                                <span style="color: red">не завершен</span>
+                            {% endif %}</td>
                             <td>{{ test.primary_mark }} баллов</td>
                             <td>{{ test.final_mark }} баллов</td>
-                            <td><a href="{{ url_for('showuser_result', usr=test.username) }}">Перейти</a></td>
+                            <td><a href="{{ url_for('showresult', try_id=test.try_id) }}">Перейти</a></td>
                         </tr>
                     {% endfor %}
                     </tbody>

@@ -142,11 +142,13 @@ def showresult(try_id):
     currentTest = Tests.query.filter_by(test_id=test).first_or_404()
     curTest = tuple([getattr(currentTest, 'task_' + str(i)) for i in range(1, 28)])
     #проверка заданий теста, если он не проверен
+    summ = currentTry.primary_mark
+    m = currentTry.final_mark
     if currentTry.primary_mark == 0:
         summ = 0
         for i in range(len(currentAnswers)):
             if i in (25,26):
-                if curTest[i] != None and currentAnswers[i] != None:
+                if currentAnswers[i] != None and curTest[i] != None:
                     curT = curTest[i].split(';')
                     curA = currentAnswers[i].split(';')
                     if len(curT) > 1:
@@ -174,7 +176,7 @@ def showresult(try_id):
     #запрос имени пользователя
     cur_user = Users.query.filter_by(user_id=currentTry.user_id).first_or_404()
     usr = cur_user.user_
-    return render_template('showresult.html', title='Результаты теста '+currentTest.test_name+' '+currentTry.time_end.strftime('%d.%m.%Y'),
+    return render_template('showresult.html', title='Результаты теста '+currentTest.test_name+' '+currentTry.time_start.strftime('%d.%m.%Y'),
                            currentAnswers=currentAnswers, test=curTest, summ=summ, mark=m, test_name=test_name, usr=usr)
 
 
@@ -522,7 +524,7 @@ def showgroup(gr):
 def showuser_result(usr):
     #страница просмотра списка теста пользователя TODO переписать с JOIN
     user_ = Users.query.filter_by(username=usr).first_or_404()
-    user_tests = Test_started.query.filter_by(user_id=user_.user_id).order_by(Test_started.time_end.desc()).all()
+    user_tests = Test_started.query.filter_by(user_id=user_.user_id).order_by(Test_started.try_id.desc()).all()
     return render_template('showuser.html', title='Список тестов пользователя {}'.format(user_.user_), usr=user_, tests=user_tests)
 
 @app.route('/showtest_allusers/<test>')

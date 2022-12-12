@@ -71,7 +71,7 @@
                         <tr id="tr_{{ tests[i].test_id }}">
                             <td>{{ i + 1 }}</td>
                             <td class="change_id">{{ tests[i].test_id }}</td>
-                            <td>{{ tests[i].test_name }}</td>
+                            <td><a href="{{ url_for('showtest_allusers', test=tests[i].test_id)}}">{{ tests[i].test_name }}</a></td>
                             <td>{{ tests[i].time_added.strftime('%d.%m.%Y') }}</td>
                             <td>{{ tests[i].test_starts_number }}</td>
                             <td>{{ tests[i].test_avg_result }}</td>
