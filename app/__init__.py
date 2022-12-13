@@ -20,8 +20,12 @@ login = LoginManager(app)
 mail = Mail(app)
 login.login_view = 'login'
 
+
+from app.errors import bp as errors_bp
+app.register_blueprint(errors_bp)
+
 CAPTCHA = CAPTCHA(config=Config.CAPTCHA_CONFIG)
 app = CAPTCHA.init_app(app)
 
-from app import routes, models, forms, errors, email
+from app import routes, models, forms, email
 
