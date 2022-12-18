@@ -28,6 +28,8 @@ from app.errors import bp as errors_bp
 app.register_blueprint(errors_bp)
 from app.reg import bp as reg_bp
 app.register_blueprint(reg_bp, url_prefix='/reg')
+from app.admin import bp as admin_bp
+app.register_blueprint(admin_bp, url_prefix='/admin')
 
 
 

@@ -7,6 +7,7 @@ from local import admin_id
 
 from app import login, db
 
+
 class Groups(db.Model):
     group_id = db.Column(db.Integer, primary_key=True)
     gr_name = db.Column(db.String(64), index=True, unique=True)
@@ -139,24 +140,27 @@ class News_all(db.Model):
 
 
 class Subjects(db.Model):
-    #список предметов
+    # список предметов
     subj_id = db.Column(db.Integer, primary_key=True)
     subj_name = db.Column(db.String(20), index=True)
+
     def __repr__(self):
         return '<Subject {}>'.format(self.subj_name)
 
+
 class Themes(db.Model):
-    #таблица тем
+    # таблица тем
     theme_id = db.Column(db.Integer, primary_key=True)
     theme_number = db.Column(db.Integer, index=True)
     theme_name = db.Column(db.String(64), index=True)
     theme_subject = db.Column(db.ForeignKey('subjects.subj_name'))
+
     def __repr__(self):
         return '<Theme {}>'.format(self.theme_name)
 
 
 class Homeworks(db.Model):
-    #домашние задания
+    # домашние задания
     hw_id = db.Column(db.Integer, primary_key=True)
     hw_user_id = db.Column(db.ForeignKey('users.user_id'), default=1)
     hw_title = db.Column(db.String(512))

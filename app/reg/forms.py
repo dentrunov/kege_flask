@@ -7,16 +7,16 @@ from string import ascii_letters, digits, punctuation
 
 class LoginForm(FlaskForm):
     username = StringField('Имя пользователя', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired(), Length(min=8)])
+    password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Имя пользователя', validators=[DataRequired(), Length(min=6, max=12, message='Имя пользователя должно быть не менее %(min)d, и не более %(max)d символов')])
+    username = StringField('Имя пользователя (логин)', validators=[DataRequired(), Length(min=6, max=12, message='Имя пользователя должно быть не менее %(min)d, и не более %(max)d символов')])
     user_ = StringField('Ваше имя (и фамилия)', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
+    password = PasswordField('Пароль (не менее 8 символов)', validators=[DataRequired(), Length(min=8, message='Пароль должен быть не менее 8 символов')])
     password2 = PasswordField(
         'Подтверждение пароля', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Регистрация')
@@ -43,11 +43,13 @@ class forgerPwdForm(FlaskForm):
     submit = SubmitField('Отправить')
 
 
+
 class newPassForm(FlaskForm):
-    password = PasswordField('Пароль', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired(), Length(min=8, message='Пароль должен быть не менее 8 символов')])
     password2 = PasswordField(
         'Подтверждение пароля', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Сохранить')
+
 
 class EditProfileForm(FlaskForm):
     groups_ = Groups.query.all()
