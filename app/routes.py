@@ -21,9 +21,6 @@ def marking(x):
     mark = {i: m for i, m in enumerate(marks)}
     return mark[x]
 
-def create_hash():
-    return ''.join([choice(list(string.ascii_letters+string.digits)) for i in range(40)])
-
 @app.route('/')
 @app.route('/index')
 def index():

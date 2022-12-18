@@ -7,9 +7,12 @@ from app.models import *
 
 class EditAdminUserProfileForm(FlaskForm):
     groups_ = Groups.query.all()
+    users_ = Users.query.all()
     user_ = StringField('Имя', validators=[DataRequired()])
     role = SelectField('Выберите роль', choices=[(3, 'Ученик'), (4, 'Учитель'), (5, 'Родитель')])
     group = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups_])
+    merging = SelectField('Выберите пользователя для слияния', choices=[(user.user_id, user.user_) for user in users_])
+    merging_button = SubmitField('Слить')
     submit = SubmitField('Сохранить')
 
 
@@ -38,6 +41,7 @@ class AddVideoForm(FlaskForm):
     video_name = StringField('Название видео')
     video_text = TextAreaField('Описание видео')
     submit = SubmitField('Сохранить')
+
 
 class AddNewsForm(FlaskForm):
     news_title = TextAreaField('Название новости')
