@@ -158,9 +158,7 @@ def adminpage_edit_user(username):
             flash('Данные изменены')
             return redirect(url_for('adminpage'))
         elif form.merging_button.data:
-            print('-----------------------------------------------')
             usr_merge = form.merging.data
-            print(usr_merge, usr.user_id)
             users_tests_merge = Test_started.query.filter_by(user_id=usr_merge).update({'user_id': usr.user_id})
             user_delete = Users.query.filter_by(user_id=usr_merge).delete()
             db.session.commit()

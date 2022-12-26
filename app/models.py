@@ -190,7 +190,7 @@ class HW_tasks(db.Model):
     task_text = db.Column(db.String(512), index=True)
     task_subject = db.Column(db.ForeignKey('subjects.subj_id'))
     task_number = db.Column(db.ForeignKey('themes.theme_id'))
-    task_answer = db.Column(db.String(32))
+    task_answer = db.Column(db.String(128))
     task_stat_true = db.Column(db.Integer, default=0)
     task_stat_false = db.Column(db.Integer, default=0)
 
