@@ -191,12 +191,12 @@ class Homeworks(db.Model):
         return '<Homework {}>'.format(self.v_name)
 
 
-class HW_for_users(db.Model):
+'''class HW_for_users(db.Model):
     #связь домашних заданий и пользователей
     #hfu_id = db.Column(db.Integer, primary_key=True)
     hfu_user_id = db.Column(db.ForeignKey('users.user_id'))
     hfu_hw_id = db.Column(db.ForeignKey('homeworks.hw_id'))
     hfu_hw_ended = db.Column(db.Boolean, default=False)
     hfu_hw_mark = db.Column(db.Integer, default=0)
-    hfu_hw_percentage = db.Column(db.Integer, default=0)
+    hfu_hw_percentage = db.Column(db.Integer, default=0)'''
 
