@@ -24,7 +24,7 @@ def login():
         user = Users.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Неверный логин или пароль')
-            return redirect(url_for('reg.login'))
+            return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -126,7 +126,7 @@ def edit_profile():
         #usr.parent_email = form.parent_email.data
         db.session.commit()
         flash('Данные изменены')
-        return redirect(url_for('reg.edit_profile'))
+        return redirect(url_for('edit_profile'))
     elif request.method == 'GET':
         form.user_.data = current_user.user_
         form.role.default = current_user.role
