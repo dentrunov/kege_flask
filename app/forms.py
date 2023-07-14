@@ -3,78 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Selec
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import *
 
-from string import ascii_letters, digits, punctuation
 
-class LoginForm(FlaskForm):
-    username = StringField('Имя пользователя', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired(), Length(min=8)])
-    remember_me = BooleanField('Запомнить меня')
-    submit = SubmitField('Войти')
-
-
-class RegistrationForm(FlaskForm):
-    username = StringField('Имя пользователя', validators=[DataRequired(), Length(min=6, max=12, message='Имя пользователя должно быть не менее %(min)d, и не более %(max)d символов')])
-    user_ = StringField('Ваше имя (и фамилия)', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    password2 = PasswordField(
-        'Подтверждение пароля', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Регистрация')
-
-
-    def validate_username(self, username):
-        user = Users.query.filter_by(username=username.data).first()
-        if user is not None:
-            raise ValidationError('Пользователь с таким именем уже существует')
-        included_chars = ascii_letters + digits + punctuation
-        for char in self.username.data:
-            if not (char in included_chars):
-                raise ValidationError(
-                    f"Символ {char} нельзя использовать")
-
-    def validate_email(self, email):
-        user = Users.query.filter_by(email=email.data).first()
-        if user is not None:
-            raise ValidationError('Такой адрес электронной почты уже существует')
-
-
-class forgerPwdForm(FlaskForm):
-    text = StringField('Имя пользователя или почта', validators=[DataRequired()])
-    submit = SubmitField('Отправить')
-
-
-class newPassForm(FlaskForm):
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    password2 = PasswordField(
-        'Подтверждение пароля', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Сохранить')
-
-class EditProfileForm(FlaskForm):
-    groups_ = Groups.query.all()
-    user_ = StringField('Имя', validators=[DataRequired()])
-    role = SelectField('Выберите роль', choices=[(3, 'Ученик')])
-    parent_email = StringField('Email родителя', validators=[Email()])
-    submit = SubmitField('Сохранить')
-
-
-class EditAdminUserProfileForm(FlaskForm):
-    groups_ = Groups.query.all()
-    user_ = StringField('Имя', validators=[DataRequired()])
-    role = SelectField('Выберите роль', choices=[(3, 'Ученик'), (4, 'Учитель'), (5, 'Родитель')])
-    group = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups_])
-    submit = SubmitField('Сохранить')
-
-
-class NewGroupForm(FlaskForm):
-    gr_name = StringField('Название', validators=[DataRequired()])
-    stud_year = SelectField('Выберите учебный год', choices=[(2022, '2022-2023'), (2023, '2023-2024')])
-    submit = SubmitField('Сохранить')
-
-class EditUserInGroupForm(FlaskForm):
-    groups_ = Groups.query.all()
-    groups = SelectField('Выберите группу', choices=[(group.group_id, group.gr_name) for group in groups_])
-    user = HiddenField()
-    submit = SubmitField('Сохранить')
 
 class AnswerSimpleForm(FlaskForm):
     answerField = StringField('Ответ')
@@ -104,30 +33,4 @@ class AnswerManyForm(FlaskForm):
     submit = SubmitField('Сохранить')
 
 
-class AddNewTest(FlaskForm):
-    pathField = StringField('Путь к папке теста')
-    testnameField = StringField('Название теста')
-    for i in range(1, 28):
-        locals()['task_Field'+str(i)] = StringField('Задание ' + str(i))
-    submit = SubmitField('Сохранить')
-
-
-class AddVideoForm(FlaskForm):
-    video_link = StringField('Ссылка на видео')
-    video_name = StringField('Название видео')
-    video_text = TextAreaField('Описание видео')
-    submit = SubmitField('Сохранить')
-
-class AddNewsForm(FlaskForm):
-    news_title = TextAreaField('Название новости')
-    news_text = TextAreaField('Текст новости')
-    #TODO доделать выбор группы для новости
-    submit = SubmitField('Сохранить')
-
-
-class AddHWTaskForm(FlaskForm):
-    HW_task_title = StringField('Название ДЗ')
-    HW_task_text = TextAreaField('Содержание задания')
-    HW_task_answer = StringField('Ответ')
-    submit = SubmitField('Сохранить')
 

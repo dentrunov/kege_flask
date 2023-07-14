@@ -10,7 +10,6 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'postgresql://' + db_username + ':' + db_password + '@' + db_host + '/' + db_name
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     POSTS_PER_PAGE = 10
-    #перенести в локал
     MAIL_SERVER = mail_server
     MAIL_PORT = mail_port
     MAIL_USE_TLS = mail_use_tls

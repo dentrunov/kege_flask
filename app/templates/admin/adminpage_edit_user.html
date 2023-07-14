@@ -40,6 +40,13 @@
                         {%  endfor %}
 
                     </p>
+                <p>
+                    {{ form.merging.label }}<br>
+                        {{ form.merging }} {{ form.merging_button }}<br>
+                        {% for error in form.merging.errors %}
+                            <span style="color:red">[{{ error }}]</span>
+                        {%  endfor %}
+                </p>
                 <p>{{ form.submit() }}</p>
                 </form>
                 <p> Ваша почта - {{ usr.email }} </p>
